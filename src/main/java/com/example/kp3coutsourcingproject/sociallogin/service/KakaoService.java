@@ -75,7 +75,7 @@ public class KakaoService {
         return jsonNode.get("access_token").asText();
     }
 
-    private KakaoUserInfoDto getKakaoUserInfo(String accessToken) throws JsonProcessingException{
+    private KakaoUserInfoDto getKakaoUserInfo(String accessToken) throws JsonProcessingException {
         //요청 URL 만들기
         URI uri = UriComponentsBuilder
                 .fromUriString("http://kapi.kakao.com")
@@ -83,6 +83,31 @@ public class KakaoService {
                 .encode()
                 .build()
                 .toUri();
+
+        //HTTP Header 생성
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + accessToken);
+        headers.add("Content-type", "application/x-www-form-urlencode;charset=utf-8");
+
+        RequestEntity<MultiValueMap<String, String>> requestEntity = RequestEntity
+                .post(uri)
+                .headers(headers)
+                .body(new LinkedMultiValueMap<>());
+
+        // HTTP 요청 보내기
+        ResponseEntity<String> response = restTemplate.exchange(
+                requestEntity, String.class);
+
+        JsonNode jsonNode = new ObjectMapper().readTree(response.getBody());
+        Long id = jsonNode.get("id").asLong();
+        String nickname = jsonNode.get("properties")
+                .get("nickname").asText();
+        String email = jsonNode.get("kakao_acoount")
+                .get("email").asText();
+
+        log.info("카카오 사용자 정보 " + id + ", " + nickname + " , " + email);
+        return new KakaoUserInfoDto(id, nickname, email);
 
 
     }
