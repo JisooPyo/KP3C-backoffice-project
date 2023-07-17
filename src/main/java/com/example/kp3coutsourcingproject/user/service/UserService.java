@@ -1,6 +1,7 @@
 package com.example.kp3coutsourcingproject.user.service;
 
 import com.example.kp3coutsourcingproject.common.dto.ApiResponseDto;
+import com.example.kp3coutsourcingproject.user.dto.ProfileDto;
 import com.example.kp3coutsourcingproject.user.dto.SignupRequestDto;
 import com.example.kp3coutsourcingproject.user.entity.Follow;
 import com.example.kp3coutsourcingproject.user.entity.User;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -68,6 +70,24 @@ public class UserService {
 		userRepository.save(user);
 		response.setStatus(200);
 		return new ApiResponseDto("회원가입 완료", response.getStatus());
+	}
+
+	public List<ProfileDto> getFollowers(String username) {
+		User user = findUser(username);
+		return user.getFollowList()
+				.stream()
+				.map(Follow::getFollower)
+				.map(ProfileDto::new)
+				.toList();
+	}
+
+	public List<ProfileDto> getFollowing(String username) {
+		User user = findUser(username);
+		return user.getFollowingList()
+				.stream()
+				.map(Follow::getFollowee)
+				.map(ProfileDto::new)
+				.toList();
 	}
 
 	public void follow(String username, User user) {
