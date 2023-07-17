@@ -3,6 +3,7 @@ package com.example.kp3coutsourcingproject.user.controller;
 import com.example.kp3coutsourcingproject.common.dto.ApiResponseDto;
 import com.example.kp3coutsourcingproject.common.jwt.JwtUtil;
 import com.example.kp3coutsourcingproject.sociallogin.service.KakaoService;
+import com.example.kp3coutsourcingproject.user.dto.ProfileDto;
 import com.example.kp3coutsourcingproject.user.dto.SignupRequestDto;
 import com.example.kp3coutsourcingproject.user.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -46,6 +47,18 @@ public class UserController {
 		}
 
 		return ResponseEntity.status(response.getStatus()).body(userService.signup(requestDto, response));
+	}
+
+	@GetMapping("/{username}/followers")
+	public ResponseEntity<List<ProfileDto>> getFollowers(@PathVariable String username) {
+		List<ProfileDto> followers = userService.getFollowers(username);
+		return ResponseEntity.ok().body(followers);
+	}
+
+	@GetMapping("/{username}/following")
+	public ResponseEntity<List<ProfileDto>> getFollowing(@PathVariable String username) {
+		List<ProfileDto> following = userService.getFollowing(username);
+		return ResponseEntity.ok().body(following);
 	}
 
 	@PostMapping("/follow/{username}")
