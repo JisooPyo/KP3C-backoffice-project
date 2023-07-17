@@ -7,7 +7,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -42,4 +44,15 @@ public class UserController {
 		return ResponseEntity.status(response.getStatus()).body(userService.signup(requestDto, response));
 	}
 
+	@PostMapping("/follow/{username}")
+	public ResponseEntity<ApiResponseDto> follow(@PathVariable String username, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+		userService.follow(username, userDetails.getUser());
+		return ResponseEntity.ok().body(new ApiResponseDto("팔로우 성공", HttpStatus.OK.value()));
+	}
+
+	@PostMapping("/unfollow/{username}")
+	public ResponseEntity<ApiResponseDto> unfollow(@PathVariable String username, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+		userService.unfollow(username, userDetails.getUser());
+		return ResponseEntity.ok().body(new ApiResponseDto("언팔로우 성공", HttpStatus.OK.value()));
+	}
 }
