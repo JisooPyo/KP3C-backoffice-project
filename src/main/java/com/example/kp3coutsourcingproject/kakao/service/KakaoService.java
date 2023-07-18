@@ -2,6 +2,8 @@ package com.example.kp3coutsourcingproject.kakao.service;
 
 import com.example.kp3coutsourcingproject.jwt.JwtUtil;
 import com.example.kp3coutsourcingproject.kakao.dto.KakaoUserInfoDto;
+import com.example.kp3coutsourcingproject.user.entity.User;
+import com.example.kp3coutsourcingproject.user.entity.UserRoleEnum;
 import com.example.kp3coutsourcingproject.user.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -18,14 +20,15 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.net.http.HttpHeaders;
+import java.util.UUID;
 
 @Slf4j(topic = "KAKAO Login")
 @Service
 @RequiredArgsConstructor
 public class KakaoService {
 
-     /*주입받을 것들*/
-    //private final PasswordEncoder passwordEncoder;
+    /*주입받을 것들*/
+    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final RestTemplate restTemplate;
     private final JwtUtil jwtUtil;
@@ -116,7 +119,36 @@ public class KakaoService {
         return new KakaoUserInfoDto(id, nickname, email);
 
         /*요청을 통해 카카오에서 정보를 받아오게 되었다!*/
+    }
 
+    private User registerKakaoUserIfNeeded(KakaoUserInfoDto kakaoUserInfo) {
+        //DB에 중복된 Kakao Id가 있는지 확인
 
+        Long kakaoId = kakaoUserInfo.getId();
+        User kakaoUser = userRepository.findByKakaoId(kakaoId).orElse(null);
+
+        if (kakaoUser == null) {
+            // Email 확인
+            String kakaoEmail = kakaoUserInfo.getEmail();
+            User sameEmailUser = userRepository.findByEmail(kakaoEmail).orElse(null);
+
+            if (sameEmailUser != null) {
+                kakaoUser = sameEmailUser;
+                //기존 회원정보에 카카오ID추가
+                kakaoUser = kakaoUser.kakaoIdUpdate(kakaoId);
+            } else {
+                //신규 회원가입
+                //password : random UUID
+                String password = UUID.randomUUID().toString();
+                String encodePassword = passwordEncoder.encode(password);
+
+                // email : kakao email
+                String email = kakaoUserInfo.getEmail();
+
+                kakaoUser = new User(kakaoUserInfo.getNickname(), encodePassword, email, UserRoleEnum.USER, kakaoId);
+            }
+            userRepository.save(kakaoUser);
+        }
+        return kakaoUser;
     }
 }
