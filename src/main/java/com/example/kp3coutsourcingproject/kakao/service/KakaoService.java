@@ -1,7 +1,6 @@
 package com.example.kp3coutsourcingproject.kakao.service;
 
-import com.example.kp3coutsourcingproject.jwt.JwtUtil;
-import org.springframework.http.HttpHeaders;
+import com.example.kp3coutsourcingproject.common.jwt.JwtUtil;
 import com.example.kp3coutsourcingproject.kakao.dto.KakaoUserInfoDto;
 import com.example.kp3coutsourcingproject.user.entity.User;
 import com.example.kp3coutsourcingproject.user.entity.UserRoleEnum;
@@ -11,6 +10,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
