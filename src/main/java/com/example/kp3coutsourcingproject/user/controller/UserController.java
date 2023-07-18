@@ -2,6 +2,7 @@ package com.example.kp3coutsourcingproject.user.controller;
 
 import com.example.kp3coutsourcingproject.common.dto.ApiResponseDto;
 import com.example.kp3coutsourcingproject.common.jwt.JwtUtil;
+import com.example.kp3coutsourcingproject.common.security.UserDetailsImpl;
 import com.example.kp3coutsourcingproject.sociallogin.service.KakaoService;
 import com.example.kp3coutsourcingproject.user.dto.ProfileDto;
 import com.example.kp3coutsourcingproject.user.dto.SignupRequestDto;
@@ -28,6 +29,7 @@ import java.util.List;
 public class UserController {
 
 	private final UserService userService;
+	private final KakaoService kakaoService;
 
 	@PostMapping("/signup")
 	@ResponseBody
@@ -47,6 +49,20 @@ public class UserController {
 		}
 
 		return ResponseEntity.status(response.getStatus()).body(userService.signup(requestDto, response));
+	}
+
+	@GetMapping("/user/kakao/callback")
+	public String kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+
+		// code: 카카오 서버로부터 받은 인가코드 service 전달 후 인증처리 및 JWT반환
+		String token = kakaoService.kakaoLogin(code);
+
+		// cookie 생성 및 직접 브라우저에 set
+		Cookie cookie = new Cookie(JwtUtil.AUTHORIZATION_HEADER, token.substring(7));
+		cookie.setPath("/");
+		response.addCookie(cookie);
+
+		return "redirect:/";
 	}
 
 	@GetMapping("/{username}/followers")
@@ -72,18 +88,4 @@ public class UserController {
 		userService.unfollow(username, userDetails.getUser());
 		return ResponseEntity.ok().body(new ApiResponseDto("언팔로우 성공", HttpStatus.OK.value()));
 	}
-
-    @GetMapping("/user/kakao/callback")
-    public String kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
-
-        // code: 카카오 서버로부터 받은 인가코드 service 전달 후 인증처리 및 JWT반환
-        String token = kakaoService.kakaoLogin(code);
-
-        // cookie 생성 및 직접 브라우저에 set
-        Cookie cookie = new Cookie(JwtUtil.AUTHORIZATION_HEADER, token.substring(7));
-        cookie.setPath("/");
-        response.addCookie(cookie);
-
-        return "redirect:/";
-    }
 }
