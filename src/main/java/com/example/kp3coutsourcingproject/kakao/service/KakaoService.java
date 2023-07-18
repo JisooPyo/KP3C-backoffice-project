@@ -1,6 +1,7 @@
 package com.example.kp3coutsourcingproject.kakao.service;
 
 import com.example.kp3coutsourcingproject.jwt.JwtUtil;
+import org.springframework.http.HttpHeaders;
 import com.example.kp3coutsourcingproject.kakao.dto.KakaoUserInfoDto;
 import com.example.kp3coutsourcingproject.user.entity.User;
 import com.example.kp3coutsourcingproject.user.entity.UserRoleEnum;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -19,7 +21,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.net.http.HttpHeaders;
 import java.util.UUID;
 
 @Slf4j(topic = "KAKAO Login")
@@ -41,7 +42,14 @@ public class KakaoService {
 
         //2. 토큰으로 카카오 api호출 : "액세스토큰"으로 "카카오 사용자 정보"가저오기
         KakaoUserInfoDto kakaoUserInfo = getKakaoUserInfo(accessToken);
-        return null;
+
+        // 3. 필요시에 회원가입
+        User kakaoUser = registerKakaoUserIfNeeded(kakaoUserInfo);
+
+        // 4. JWT 토큰 반환
+        String createToken = jwtUtil.createToken(kakaoUser.getUsername(), kakaoUser.getRole());
+
+        return createToken;
     }
 
     public String getToken(String code) throws JsonProcessingException {
