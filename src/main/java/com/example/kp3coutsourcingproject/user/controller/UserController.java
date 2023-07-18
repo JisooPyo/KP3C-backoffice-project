@@ -71,10 +71,10 @@ public class UserController {
         return ResponseEntity.ok().body(followers);
     }
 
-    @GetMapping("/{username}/following")
-    public ResponseEntity<List<ProfileDto>> getFollowing(@PathVariable String username) {
-        List<ProfileDto> following = userService.getFollowing(username);
-        return ResponseEntity.ok().body(following);
+    @GetMapping("/{username}/followees")
+    public ResponseEntity<List<ProfileDto>> getFollowees(@PathVariable String username) {
+        List<ProfileDto> followees = userService.getFollowees(username);
+        return ResponseEntity.ok().body(followees);
     }
 
     @PostMapping("/follow/{username}")

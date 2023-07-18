@@ -81,7 +81,7 @@ public class UserService {
 				.toList();
 	}
 
-	public List<ProfileDto> getFollowing(String username) {
+	public List<ProfileDto> getFollowees(String username) {
 		User user = findUser(username);
 		return user.getFollowingList()
 				.stream()
