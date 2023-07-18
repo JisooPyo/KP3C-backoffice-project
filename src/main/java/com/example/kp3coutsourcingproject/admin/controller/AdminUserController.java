@@ -28,6 +28,7 @@ public class AdminUserController {
         List<AdminUserResponseDto> results = adminUserService.getUsers(userDetails.getUser());
         return ResponseEntity.ok().body(results);
     }
+
     @GetMapping("/{user_id}")
     public ResponseEntity<AdminUserResponseDto> getUser(
             @PathVariable(value = "user_id") Long userId,
@@ -51,11 +52,10 @@ public class AdminUserController {
 
     @PutMapping("/{user_id}/promote")
     public ResponseEntity<ApiResponseDto> promoteUserRole(
-            @PathVariable(value="user_id") Long userId,
+            @PathVariable(value = "user_id") Long userId,
             @RequestBody AdminUserRoleRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails
-            ) {
-
+    ) {
         /* 회원 권한 승격(변경) */
         adminUserService.promoteUserRole(userId, requestDto, userDetails.getUser());
         return ResponseEntity.ok().body(

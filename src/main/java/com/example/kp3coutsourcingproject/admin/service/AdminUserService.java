@@ -20,7 +20,7 @@ public class AdminUserService {
     private final UserRepository userRepository;
 
     public List<AdminUserResponseDto> getUsers(User user) {
-        // 유저의 권한 확인
+        // 회원 권한 확인
         UserRoleEnum userRoleEnum = user.getRole();
         if (userRoleEnum != UserRoleEnum.ADMIN) {
             throw new IllegalArgumentException("관리자 권한이 있어야만 해당 요청을 실행할 수 있습니다.");
@@ -32,7 +32,7 @@ public class AdminUserService {
     }
 
     public AdminUserResponseDto getUser(Long userId, User user) {
-        // 유저의 권한 확인
+        // 회원 권한 확인
         UserRoleEnum userRoleEnum = user.getRole();
         if (userRoleEnum != UserRoleEnum.ADMIN) {
             throw new IllegalArgumentException("관리자 권한이 있어야만 해당 요청을 실행할 수 있습니다.");
@@ -44,7 +44,7 @@ public class AdminUserService {
     }
 
     public AdminUserResponseDto updateUserProfile(Long userId, ProfileRequestDto requestDto, User user) {
-        // 유저의 권한 확인
+        // 회원 권한 확인
         UserRoleEnum userRoleEnum = user.getRole();
         if (userRoleEnum != UserRoleEnum.ADMIN) {
             throw new IllegalArgumentException("관리자 권한이 있어야만 해당 요청을 실행할 수 있습니다.");
@@ -62,6 +62,19 @@ public class AdminUserService {
     }
 
     public void promoteUserRole(Long userId, AdminUserRoleRequestDto requestDto, User user) {
+        // 회원 권한 확인
+        UserRoleEnum userRoleEnum = user.getRole();
+        if (userRoleEnum != UserRoleEnum.ADMIN) {
+            throw new IllegalArgumentException("관리자 권한이 있어야만 해당 요청을 실행할 수 있습니다.");
+        }
+
+        User findUser = findUser(userId);
+        // findUser가 관리인이면 권한 수정 불가능
+        if(findUser.getRole() == UserRoleEnum.ADMIN) {
+            throw new IllegalArgumentException("권한을 수정할 수 없습니다.");
+        }
+        
+        findUser.setRole(requestDto.getRole()); // 권한 변경
     }
 
     public void blockUser(Long userId, User user) {
