@@ -1,12 +1,12 @@
 package com.example.kp3coutsourcingproject.admin.controller;
 
 import com.example.kp3coutsourcingproject.admin.dto.AdminUserRequestDto;
+import com.example.kp3coutsourcingproject.admin.dto.AdminUserResponseDto;
 import com.example.kp3coutsourcingproject.admin.dto.AdminUserRoleRequestDto;
 import com.example.kp3coutsourcingproject.admin.service.AdminUserService;
 import com.example.kp3coutsourcingproject.common.dto.ApiResponseDto;
 import com.example.kp3coutsourcingproject.common.security.UserDetailsImpl;
 import com.example.kp3coutsourcingproject.user.dto.ProfileDto;
-import com.example.kp3coutsourcingproject.user.entity.UserRoleEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +22,10 @@ public class AdminUserController {
     private final AdminUserService adminUserService;
 
     @GetMapping
-    public ResponseEntity<List<ProfileDto>> getUsers(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<List<AdminUserResponseDto>> getUsers(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         /* 전체 유저 조회 */
-
-        List<ProfileDto> profileDtos = adminUserService.getUsers(userDetails.getUser());
-
-        return ResponseEntity.ok().body(profileDtos);
+        List<AdminUserResponseDto> users = adminUserService.getUsers(userDetails.getUser());
+        return ResponseEntity.ok().body(users);
     }
 
     @PutMapping("/{user_id}")
@@ -37,7 +35,6 @@ public class AdminUserController {
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         /* 회원 정보 수정 */
-
         ProfileDto profileDto = adminUserService.updateUserInfo(userId, requestDto, userDetails.getUser());
 
         return ResponseEntity.ok().body(profileDto);
