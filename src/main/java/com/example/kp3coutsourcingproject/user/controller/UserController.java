@@ -52,7 +52,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/user/kakao/callback")
+    @GetMapping("/kakao/callback")
     public String kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
 
         // code: 카카오 서버로부터 받은 인가코드 service 전달 후 인증처리 및 JWT반환
