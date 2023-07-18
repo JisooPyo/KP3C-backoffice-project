@@ -1,11 +1,12 @@
 package com.example.kp3coutsourcingproject.user.controller;
 
 import com.example.kp3coutsourcingproject.common.dto.ApiResponseDto;
-import com.example.kp3coutsourcingproject.jwt.JwtUtil;
+import com.example.kp3coutsourcingproject.common.jwt.JwtUtil;
 import com.example.kp3coutsourcingproject.sociallogin.service.KakaoService;
 import com.example.kp3coutsourcingproject.user.dto.SignupRequestDto;
 import com.example.kp3coutsourcingproject.user.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,6 @@ public class UserController {
 
     private final UserService userService;
     private final KakaoService kakaoService;
-    private final JwtUtil jwtUtil;
 
     @PostMapping("/signup")
     @ResponseBody
@@ -55,7 +55,7 @@ public class UserController {
         String token = kakaoService.kakaoLogin(code);
 
         // cookie 생성 및 직접 브라우저에 set
-        Cookie cookie = new Cookie(JwtUtil.AUTHORIZATOON_HEADER, token.substring(7));
+        Cookie cookie = new Cookie(JwtUtil.AUTHORIZATION_HEADER, token.substring(7));
         cookie.setPath("/");
         response.addCookie(cookie);
 
