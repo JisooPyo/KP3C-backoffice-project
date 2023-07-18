@@ -22,10 +22,21 @@ public class AdminUserController {
     private final AdminUserService adminUserService;
 
     @GetMapping
-    public ResponseEntity<List<AdminUserResponseDto>> getUsers(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        /* 전체 유저 조회 */
+    public ResponseEntity<List<AdminUserResponseDto>> getUsers(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        /* 전체 회원 조회 */
         List<AdminUserResponseDto> users = adminUserService.getUsers(userDetails.getUser());
         return ResponseEntity.ok().body(users);
+    }
+    @GetMapping("/{user_id}")
+    public ResponseEntity<ProfileDto> getUser(
+            @PathVariable(value = "user_id") Long userId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        /* 회원 1명만 조회 */
+        ProfileDto profileDto = adminUserService.getUser(userId, userDetails.getUser());
+        return ResponseEntity.ok().body(profileDto);
     }
 
     @PutMapping("/{user_id}")
@@ -36,7 +47,6 @@ public class AdminUserController {
     ) {
         /* 회원 정보 수정 */
         ProfileDto profileDto = adminUserService.updateUserInfo(userId, requestDto, userDetails.getUser());
-
         return ResponseEntity.ok().body(profileDto);
     }
 
