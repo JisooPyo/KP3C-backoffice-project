@@ -7,9 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProfileRequestDto {
-    @NotBlank
     private String nickname;
     private String introduction;
-    @NotBlank
     private String imageUrl;
 }
