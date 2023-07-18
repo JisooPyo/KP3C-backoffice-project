@@ -1,6 +1,9 @@
 package com.example.kp3coutsourcingproject.admin.entity;
 
+import com.example.kp3coutsourcingproject.admin.dto.AdminPostRequestDto;
 import com.example.kp3coutsourcingproject.admin.dto.AdminUserRequestDto;
+import com.example.kp3coutsourcingproject.common.dto.Timestamped;
+import com.example.kp3coutsourcingproject.user.entity.User;
 import jakarta.persistence.*;
 import jdk.jfr.Timestamp;
 import lombok.Getter;
@@ -16,12 +19,7 @@ import java.time.LocalDateTime;
 @Setter
 @Table(name = "notice")
 @NoArgsConstructor
-public class Notice {
-
-    @CreatedDate
-    @Column(updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime createdAt;
+public class Notice extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +33,7 @@ public class Notice {
     private User user;
 
 
-    public Notice(AdminUserRequestDto requestDto, User user) {
+    public Notice(AdminPostRequestDto requestDto, User user) {
         this.content = requestDto.getContent();
         this.user = user;
     }

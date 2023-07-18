@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -36,6 +39,11 @@ public class User {
 	@Enumerated(value = EnumType.STRING)
 	private UserRoleEnum role;
 
+	@OneToMany(mappedBy = "followee", cascade = CascadeType.ALL)
+	private List<Follow> followList = new ArrayList<>();
+
+	@OneToMany(mappedBy = "follower", cascade = CascadeType.ALL)
+	private List<Follow> followingList = new ArrayList<>();
 	private Long kakaoId;
 
 
