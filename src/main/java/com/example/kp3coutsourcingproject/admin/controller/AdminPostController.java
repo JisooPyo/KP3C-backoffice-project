@@ -1,6 +1,6 @@
 package com.example.kp3coutsourcingproject.admin.controller;
 
-import com.example.kp3coutsourcingproject.admin.service.AdminService;
+import com.example.kp3coutsourcingproject.admin.service.AdminPostService;
 import com.example.kp3coutsourcingproject.post.dto.PostResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,11 +12,11 @@ import java.util.List;
 @RequestMapping("/kp3c/manage")
 @RequiredArgsConstructor
 public class AdminPostController {
-    private final AdminService adminService;
+    private final AdminPostService adminPostService;
 
     @GetMapping("/posts")
     public ResponseEntity<List<PostResponseDto>> getPosts() { /* 전체 게시글 조회 */
-        List<PostResponseDto> results = adminService.getPosts();
+        List<PostResponseDto> results = adminPostService.getPosts();
 
         return ResponseEntity.ok().body(results);
     }

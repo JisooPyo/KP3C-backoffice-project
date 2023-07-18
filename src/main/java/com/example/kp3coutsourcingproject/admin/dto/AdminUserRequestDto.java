@@ -9,8 +9,6 @@ import lombok.Setter;
 public class AdminUserRequestDto {
 
     @NotBlank
-    private String username;
-    @NotBlank
     private String nickname;
     @NotBlank
     private String password;

@@ -1,6 +1,6 @@
 package com.example.kp3coutsourcingproject.admin.controller;
 
-import com.example.kp3coutsourcingproject.admin.service.AdminService;
+import com.example.kp3coutsourcingproject.admin.service.AdminUserService;
 import com.example.kp3coutsourcingproject.user.dto.ProfileDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,7 @@ import java.util.List;
 @RequestMapping("/kp3c/manage")
 @RequiredArgsConstructor
 public class AdminUserController {
-    private final AdminService adminService;
+    private final AdminUserService adminUserService;
 
     @GetMapping("/users")
     public ResponseEntity<List<ProfileDto>> getUsers() { /* 전체 유저 조회 */

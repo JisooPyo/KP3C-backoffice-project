@@ -11,7 +11,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "notice")
+@Table(name = "notices")
 @NoArgsConstructor
 public class Notice extends Timestamped {
 
