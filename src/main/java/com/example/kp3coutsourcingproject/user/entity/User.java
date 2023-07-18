@@ -46,6 +46,15 @@ public class User {
 	private List<Follow> followingList = new ArrayList<>();
 	private Long kakaoId;
 
+	public User(String username, String nickname, String password,
+				String introduction, String email, UserRoleEnum role) {
+		this.username = username;
+		this.nickname = nickname;
+		this.password = password;
+		this.introduction = introduction;
+		this.email = email;
+		this.role = role;
+	}
 
 	public User(String username, String nickname, String password,
 				String introduction, String email, UserRoleEnum role , Long kakaoId) {
