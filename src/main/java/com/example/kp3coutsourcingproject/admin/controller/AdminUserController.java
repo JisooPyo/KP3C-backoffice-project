@@ -1,12 +1,11 @@
 package com.example.kp3coutsourcingproject.admin.controller;
 
-import com.example.kp3coutsourcingproject.admin.dto.AdminUserRequestDto;
 import com.example.kp3coutsourcingproject.admin.dto.AdminUserResponseDto;
 import com.example.kp3coutsourcingproject.admin.dto.AdminUserRoleRequestDto;
 import com.example.kp3coutsourcingproject.admin.service.AdminUserService;
 import com.example.kp3coutsourcingproject.common.dto.ApiResponseDto;
 import com.example.kp3coutsourcingproject.common.security.UserDetailsImpl;
-import com.example.kp3coutsourcingproject.user.dto.ProfileDto;
+import com.example.kp3coutsourcingproject.user.dto.ProfileRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,28 +25,28 @@ public class AdminUserController {
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         /* 전체 회원 조회 */
-        List<AdminUserResponseDto> users = adminUserService.getUsers(userDetails.getUser());
-        return ResponseEntity.ok().body(users);
+        List<AdminUserResponseDto> results = adminUserService.getUsers(userDetails.getUser());
+        return ResponseEntity.ok().body(results);
     }
     @GetMapping("/{user_id}")
-    public ResponseEntity<ProfileDto> getUser(
+    public ResponseEntity<AdminUserResponseDto> getUser(
             @PathVariable(value = "user_id") Long userId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         /* 회원 1명만 조회 */
-        ProfileDto profileDto = adminUserService.getUser(userId, userDetails.getUser());
-        return ResponseEntity.ok().body(profileDto);
+        AdminUserResponseDto result = adminUserService.getUser(userId, userDetails.getUser());
+        return ResponseEntity.ok().body(result);
     }
 
     @PutMapping("/{user_id}")
-    public ResponseEntity<ProfileDto> updateUserInfo(
+    public ResponseEntity<AdminUserResponseDto> updateUserProfile(
             @PathVariable(value = "user_id") Long userId,
-            @RequestBody AdminUserRequestDto requestDto,
+            @RequestBody ProfileRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         /* 회원 정보 수정 */
-        ProfileDto profileDto = adminUserService.updateUserInfo(userId, requestDto, userDetails.getUser());
-        return ResponseEntity.ok().body(profileDto);
+        AdminUserResponseDto result = adminUserService.updateUserProfile(userId, requestDto, userDetails.getUser());
+        return ResponseEntity.ok().body(result);
     }
 
     @PutMapping("/{user_id}/promote")
@@ -72,7 +71,6 @@ public class AdminUserController {
                 new ApiResponseDto("회원 차단 완료", HttpStatus.OK.value())
         );
     }
-
 
     @DeleteMapping("/{user_id}")
     public ResponseEntity<ApiResponseDto> deleteUser(@PathVariable(value = "user_id") Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails) {

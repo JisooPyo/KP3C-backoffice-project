@@ -1,20 +1,20 @@
 package com.example.kp3coutsourcingproject.admin.service;
 
-import com.example.kp3coutsourcingproject.admin.dto.AdminUserRequestDto;
 import com.example.kp3coutsourcingproject.admin.dto.AdminUserResponseDto;
 import com.example.kp3coutsourcingproject.admin.dto.AdminUserRoleRequestDto;
-import com.example.kp3coutsourcingproject.user.dto.ProfileDto;
+import com.example.kp3coutsourcingproject.user.dto.ProfileRequestDto;
 import com.example.kp3coutsourcingproject.user.entity.User;
 import com.example.kp3coutsourcingproject.user.entity.UserRoleEnum;
 import com.example.kp3coutsourcingproject.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AdminUserService {
 
     private final UserRepository userRepository;
@@ -31,7 +31,7 @@ public class AdminUserService {
         return users.stream().map(AdminUserResponseDto::new).toList();
     }
 
-    public ProfileDto getUser(Long userId, User user) {
+    public AdminUserResponseDto getUser(Long userId, User user) {
         // 유저의 권한 확인
         UserRoleEnum userRoleEnum = user.getRole();
         if (userRoleEnum != UserRoleEnum.ADMIN) {
@@ -39,14 +39,26 @@ public class AdminUserService {
         }
 
         // 회원이 존재하는지 확인
-        User findUser = userRepository.findById(userId).orElseThrow(() ->
-                new IllegalArgumentException("해당 유저는 존재하지 않습니다.")
-        );
-        return new ProfileDto(findUser);
+        User findUser = findUser(userId);
+        return new AdminUserResponseDto(findUser);
     }
 
-    public ProfileDto updateUserInfo(Long userId, AdminUserRequestDto requestDto, User user) {
-        return null;
+    public AdminUserResponseDto updateUserProfile(Long userId, ProfileRequestDto requestDto, User user) {
+        // 유저의 권한 확인
+        UserRoleEnum userRoleEnum = user.getRole();
+        if (userRoleEnum != UserRoleEnum.ADMIN) {
+            throw new IllegalArgumentException("관리자 권한이 있어야만 해당 요청을 실행할 수 있습니다.");
+        }
+
+        User findUser = findUser(userId);
+        // findUser가 관리인이면 자신만 수정할 수 있게 하기
+        if(findUser.getRole() == UserRoleEnum.ADMIN) {
+            if(findUser.getId() != user.getId()) {
+                throw new IllegalArgumentException("관리자 정보는 본인만 수정할 수 있습니다.");
+            }
+        }
+        findUser.update(requestDto);
+        return new AdminUserResponseDto(findUser);
     }
 
     public void promoteUserRole(Long userId, AdminUserRoleRequestDto requestDto, User user) {
@@ -56,6 +68,13 @@ public class AdminUserService {
     }
 
     public void deleteUser(Long userId, User user) {
+    }
+
+
+    private User findUser(Long userId) {
+        return userRepository.findById(userId).orElseThrow(() ->
+                new IllegalArgumentException("해당 유저는 존재하지 않습니다.")
+        );
     }
 
 }
