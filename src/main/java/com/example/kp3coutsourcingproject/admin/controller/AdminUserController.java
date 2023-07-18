@@ -20,73 +20,73 @@ import java.util.List;
 public class AdminUserController {
     private final AdminUserService adminUserService;
 
+    /* 전체 회원 조회 */
     @GetMapping
     public ResponseEntity<List<AdminUserResponseDto>> getUsers(
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        /* 전체 회원 조회 */
         List<AdminUserResponseDto> results = adminUserService.getUsers(userDetails.getUser());
         return ResponseEntity.ok().body(results);
     }
 
+    /* 회원 1명만 조회 */
     @GetMapping("/{user_id}")
     public ResponseEntity<AdminUserResponseDto> getUser(
             @PathVariable(value = "user_id") Long userId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        /* 회원 1명만 조회 */
         AdminUserResponseDto result = adminUserService.getUser(userId, userDetails.getUser());
         return ResponseEntity.ok().body(result);
     }
 
+    /* 회원 정보 수정 */
     @PutMapping("/{user_id}")
     public ResponseEntity<AdminUserResponseDto> updateUserProfile(
             @PathVariable(value = "user_id") Long userId,
             @RequestBody ProfileRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        /* 회원 정보 수정 */
         AdminUserResponseDto result = adminUserService.updateUserProfile(userId, requestDto, userDetails.getUser());
         return ResponseEntity.ok().body(result);
     }
 
+    /* 회원 권한 승격(변경) */
     @PutMapping("/{user_id}/promote")
     public ResponseEntity<ApiResponseDto> updateUserRole(
             @PathVariable(value = "user_id") Long userId,
             @RequestBody AdminUserRoleRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        /* 회원 권한 승격(변경) */
         adminUserService.promoteUserRole(userId, requestDto, userDetails.getUser());
         return ResponseEntity.ok().body(
                 new ApiResponseDto("회원 권한 변경 완료", HttpStatus.OK.value())
         );
     }
 
+    /* 회원 비밀번호 변경(강제) */
     @PutMapping("/{user_id}/password")
     public ResponseEntity<ApiResponseDto> updateUserPassword(
             @PathVariable(value = "user_id") Long userId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        /* 회원 비밀번호 변경(강제) */
         String pw = adminUserService.updateUserPassword(userId, userDetails.getUser());
         return ResponseEntity.ok().body(
                 new ApiResponseDto("회원 권한 변경 완료, 비밀번호: " + pw, HttpStatus.OK.value())
         );
     }
 
+    /* 회원 차단 */
     @PutMapping("/{user_id}/block")
     public ResponseEntity<ApiResponseDto> blockUser(@PathVariable(value = "user_id") Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        /* 회원 차단 */
         adminUserService.blockUser(userId, userDetails.getUser());
         return ResponseEntity.ok().body(
                 new ApiResponseDto("회원 차단 완료", HttpStatus.OK.value())
         );
     }
 
+    /* 회원 삭제 */
     @DeleteMapping("/{user_id}")
     public ResponseEntity<ApiResponseDto> deleteUser(@PathVariable(value = "user_id") Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        /* 회원 삭제 */
         adminUserService.deleteUser(userId, userDetails.getUser());
         return ResponseEntity.ok().body(
                 new ApiResponseDto("회원 삭제 완료", HttpStatus.OK.value())
