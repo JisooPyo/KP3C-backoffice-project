@@ -1,5 +1,6 @@
 package com.example.kp3coutsourcingproject.comment.entity;
 
+import com.example.kp3coutsourcingproject.comment.dto.CommentRequestDto;
 import com.example.kp3coutsourcingproject.common.dto.Timestamped;
 import com.example.kp3coutsourcingproject.post.entity.Post;
 import com.example.kp3coutsourcingproject.user.entity.User;
@@ -15,7 +16,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@Table(name="comments")
+@Table(name = "comments")
 @NoArgsConstructor
 public class Comment extends Timestamped {
 
@@ -32,7 +33,7 @@ public class Comment extends Timestamped {
 	private User user;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "parent_comment_id")
+	@JoinColumn(name = "parentCommentId")
 	private Comment parentComment;
 
 	@Column(nullable = false)
@@ -42,4 +43,10 @@ public class Comment extends Timestamped {
 	@OneToMany(mappedBy = "parent", orphanRemoval = true)
 	private List<Comment> children = new ArrayList<>();
 
+	public Comment(User user, Post post, Comment parent, String content) {
+		this.post = post;
+		this.user = user;
+		this.parentComment = parent;
+		this.content = content;
+	}
 }

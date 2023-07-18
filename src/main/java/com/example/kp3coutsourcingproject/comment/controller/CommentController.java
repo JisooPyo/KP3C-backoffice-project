@@ -2,6 +2,7 @@ package com.example.kp3coutsourcingproject.comment.controller;
 
 import com.example.kp3coutsourcingproject.comment.dto.CommentRequestDto;
 import com.example.kp3coutsourcingproject.comment.dto.CommentResponseDto;
+import com.example.kp3coutsourcingproject.comment.service.CommentService;
 import com.example.kp3coutsourcingproject.common.dto.ApiResponseDto;
 import com.example.kp3coutsourcingproject.common.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/kp3c/post")
 public class CommentController {
+	private final CommentService commentService;
+
 	// 포스트의 댓글 전체 조회
 	@GetMapping("/{postId}/comments")
 	public ResponseEntity<List<CommentResponseDto>> getCommentsByPostId(@PathVariable Long postId) {
@@ -33,7 +36,8 @@ public class CommentController {
 	public ResponseEntity<CommentResponseDto> createComment(@PathVariable Long postId,
 															@RequestBody CommentRequestDto requestDto,
 															@AuthenticationPrincipal UserDetailsImpl userDetails){
-		return null;
+		CommentResponseDto responseDto = commentService.createComment(postId,requestDto,userDetails.getUser());
+		return ResponseEntity.ok().body(responseDto);
 	}
 
 	// 댓글 수정
@@ -45,6 +49,7 @@ public class CommentController {
 		return null;
 	}
 
+	// 댓글 삭제
 	@DeleteMapping("/{postId}/comment/{id}")
 	public ResponseEntity<ApiResponseDto> deleteComment(@PathVariable Long postId,
 														@PathVariable Long id,
@@ -53,6 +58,4 @@ public class CommentController {
 	}
 
 
-	// 댓글 삭제
-	/{postId}/comment/{commentId}
 }

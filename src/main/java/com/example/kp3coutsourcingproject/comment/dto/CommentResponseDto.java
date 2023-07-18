@@ -9,12 +9,14 @@ import java.time.LocalDateTime;
 @Getter
 public class CommentResponseDto extends ApiResponseDto {
 	private Long id;
+	private Long parentId;
 	private String nickname;
 	private String content;
 	private LocalDateTime createdAt;
 
 	public CommentResponseDto(Comment comment) {
 		this.id = comment.getId();
+		this.parentId = comment.getParentComment().getId();
 		this.nickname = comment.getUser().getNickname();
 		this.content = comment.getContent();
 		this.createdAt = comment.getCreatedAt();
