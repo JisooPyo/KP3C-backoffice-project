@@ -2,7 +2,7 @@ package com.example.kp3coutsourcingproject.user.controller;
 
 import com.example.kp3coutsourcingproject.common.dto.ApiResponseDto;
 import com.example.kp3coutsourcingproject.common.jwt.JwtUtil;
-import com.example.kp3coutsourcingproject.sociallogin.service.KakaoService;
+import com.example.kp3coutsourcingproject.kakao.service.KakaoService;
 import com.example.kp3coutsourcingproject.user.dto.SignupRequestDto;
 import com.example.kp3coutsourcingproject.user.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
