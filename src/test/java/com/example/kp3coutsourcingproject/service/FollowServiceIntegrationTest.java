@@ -30,27 +30,23 @@ public class FollowServiceIntegrationTest {
     @Autowired
     FollowRepository followRepository;
 
-    @Test
-    @Order(1)
-    void test() {
-        //given
-        User userA = new User("userA", "userA", "Abc012#!", "hi", "userA@email.com", UserRoleEnum.USER);
-        User userB = new User("userB", "userB", "Abc012#!", "hi", "userB@email.com", UserRoleEnum.USER);
-        User userC = new User("userC", "userC", "Abc012#!", "hi", "userC@email.com", UserRoleEnum.USER);
+    User userA, userB, userC;
+
+    private void userSetup() {
+        userA = new User("userA", "userA", "Abc012#!", "hi", "userA@email.com", UserRoleEnum.USER);
+        userB = new User("userB", "userB", "Abc012#!", "hi", "userB@email.com", UserRoleEnum.USER);
+        userC = new User("userC", "userC", "Abc012#!", "hi", "userC@email.com", UserRoleEnum.USER);
         userRepository.save(userA);
         userRepository.save(userB);
         userRepository.save(userC);
-        assertEquals(userRepository.findAll().size(), 3);
     }
 
-
     @Test
-    @Order(2)
+    @Order(1)
     @DisplayName("팔로우 이후 팔로워 팔로잉 조회") // A -> B, B -> C, A -> C
     void test1() {
         //given
-        User userA = userRepository.findByUsername("userA").orElse(null);
-        User userB = userRepository.findByUsername("userB").orElse(null);
+        this.userSetup();
 
         //when
         followService.follow("userB", userA);
@@ -61,7 +57,6 @@ public class FollowServiceIntegrationTest {
         List<ProfileDto> userCFollowers = followService.getFollowers("userC");
         List<ProfileDto> userAFollowing = followService.getFollowing("userA");
         List<ProfileDto> userCFollowing = followService.getFollowing("userC");
-        System.out.println("userCFollowers = " + userCFollowers);
 
         assertThat(userCFollowers)
                 .extracting("username")
@@ -79,13 +74,9 @@ public class FollowServiceIntegrationTest {
     }
 
     @Test
-    @Order(3)
+    @Order(2)
     @DisplayName("언팔로우 이후 팔로워 팔로잉 조회") // A -> B, A -> C
     void test2() {
-        //given
-        User userA = userRepository.findByUsername("userA").orElse(null);
-        User userB = userRepository.findByUsername("userB").orElse(null);
-
         //when
         followService.unfollow("userC", userB);
 
