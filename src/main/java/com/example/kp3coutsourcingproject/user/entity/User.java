@@ -1,5 +1,6 @@
 package com.example.kp3coutsourcingproject.user.entity;
 
+import com.example.kp3coutsourcingproject.user.dto.ProfileRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -52,5 +53,12 @@ public class User {
 		this.introduction = introduction;
 		this.email = email;
 		this.role = role;
+	}
+
+	// 관리자용 update 입니다
+	public void update(ProfileRequestDto requestDto) {
+		this.nickname = requestDto.getNickname();
+		this.introduction = requestDto.getIntroduction();
+		// this.imageUrl = requestDto.getImageUrl();
 	}
 }

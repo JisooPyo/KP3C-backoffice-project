@@ -1,4 +1,4 @@
-package com.example.kp3coutsourcingproject.admin.dto;
+package com.example.kp3coutsourcingproject.user.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -6,13 +6,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AdminUserRequestDto {
-
+public class ProfileRequestDto {
     @NotBlank
     private String nickname;
-    @NotBlank
-    private String password;
     private String introduction;
     @NotBlank
-    private String email;
+    private String imageUrl;
 }
