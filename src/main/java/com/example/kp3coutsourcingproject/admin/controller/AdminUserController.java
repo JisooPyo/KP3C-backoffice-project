@@ -51,7 +51,7 @@ public class AdminUserController {
     }
 
     @PutMapping("/{user_id}/promote")
-    public ResponseEntity<ApiResponseDto> promoteUserRole(
+    public ResponseEntity<ApiResponseDto> updateUserRole(
             @PathVariable(value = "user_id") Long userId,
             @RequestBody AdminUserRoleRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails
