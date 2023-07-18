@@ -57,7 +57,7 @@ public class AdminUserController {
             @RequestBody AdminUserRoleRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        adminUserService.promoteUserRole(userId, requestDto, userDetails.getUser());
+        adminUserService.updateUserRole(userId, requestDto, userDetails.getUser());
         return ResponseEntity.ok().body(
                 new ApiResponseDto("회원 권한 변경 완료", HttpStatus.OK.value())
         );
