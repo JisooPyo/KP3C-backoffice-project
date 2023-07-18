@@ -63,6 +63,18 @@ public class AdminUserController {
         );
     }
 
+    @PutMapping("/{user_id}/password")
+    public ResponseEntity<ApiResponseDto> updateUserPassword(
+            @PathVariable(value = "user_id") Long userId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        /* 회원 비밀번호 변경(강제) */
+        String pw = adminUserService.updateUserPassword(userId, userDetails.getUser());
+        return ResponseEntity.ok().body(
+                new ApiResponseDto("회원 권한 변경 완료, 비밀번호: " + pw, HttpStatus.OK.value())
+        );
+    }
+
     @PutMapping("/{user_id}/block")
     public ResponseEntity<ApiResponseDto> blockUser(@PathVariable(value = "user_id") Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         /* 회원 차단 */
