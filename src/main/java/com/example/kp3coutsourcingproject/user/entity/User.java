@@ -45,12 +45,16 @@ public class User {
 	@OneToMany(mappedBy = "follower", cascade = CascadeType.ALL)
 	private List<Follow> followingList = new ArrayList<>();
 
-	public User(String username, String nickname, String password, String introduction, String email, UserRoleEnum role) {
+	@Column(nullable = false)
+	private String imageFile;
+
+	public User(String username, String nickname, String password, String introduction, String email, UserRoleEnum role, String image) {
 		this.username = username;
 		this.nickname = nickname;
 		this.password = password;
 		this.introduction = introduction;
 		this.email = email;
 		this.role = role;
+		this.imageFile = image;
 	}
 }
