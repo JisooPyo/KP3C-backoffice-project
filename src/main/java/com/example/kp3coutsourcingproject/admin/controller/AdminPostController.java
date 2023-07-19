@@ -21,14 +21,14 @@ public class AdminPostController {
     private final AdminPostService adminPostService;
 
     /* 전체 게시글 조회 */
-    @GetMapping("/post")
+    @GetMapping
     public ResponseEntity<List<PostResponseDto>> getPosts(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         List<PostResponseDto> results = adminPostService.getPosts(userDetails.getUser());
         return ResponseEntity.ok().body(results);
     }
 
     /* 게시글 1개 조회 */
-    @GetMapping("/post/{post_id}")
+    @GetMapping("/{post_id}")
     public ResponseEntity<PostResponseDto> getPost(
             @PathVariable Long postId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
@@ -38,7 +38,7 @@ public class AdminPostController {
     }
 
     /* 게시글 수정 */
-    @PutMapping("/post/{post_id}")
+    @PutMapping("/{post_id}")
     public ResponseEntity<PostResponseDto> updatePost(
             @PathVariable Long postId,
             @RequestBody PostRequestDto requestDto,
@@ -49,7 +49,7 @@ public class AdminPostController {
     }
 
     /* 게시글 삭제 */
-    @DeleteMapping("/post/{post_id}")
+    @DeleteMapping("/{post_id}")
     public ResponseEntity<ApiResponseDto> deletePost(
             @PathVariable Long postId,
             @AuthenticationPrincipal UserDetailsImpl userDetails

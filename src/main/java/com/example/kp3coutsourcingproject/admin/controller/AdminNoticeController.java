@@ -21,7 +21,7 @@ public class AdminNoticeController {
     private final AdminNoticeService adminNoticeService;
 
     /* 공지 작성 */
-    @PostMapping("/notice")
+    @PostMapping
     public ResponseEntity<AdminNoticeResponseDto> createNotice(
             @RequestBody PostRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails
@@ -31,14 +31,14 @@ public class AdminNoticeController {
     }
 
     /* 전체 공지 조회 */
-    @GetMapping("/notice")
+    @GetMapping
     public ResponseEntity<List<AdminNoticeResponseDto>> getNotices(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         List<AdminNoticeResponseDto> results = adminNoticeService.getNotices(userDetails.getUser());
         return ResponseEntity.ok().body(results);
     }
 
     /* 공지 1개 조회 */
-    @GetMapping("/notice/{notice_id}")
+    @GetMapping("/{notice_id}")
     public ResponseEntity<AdminNoticeResponseDto> getNotice(
             @PathVariable Long noticeId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
@@ -48,7 +48,7 @@ public class AdminNoticeController {
     }
 
     /* 공지 수정 */
-    @PutMapping("/notice/{notice_id}")
+    @PutMapping("/{notice_id}")
     public ResponseEntity<AdminNoticeResponseDto> updateNotice(
             @PathVariable Long noticeId,
             @RequestBody PostRequestDto requestDto,
@@ -59,7 +59,7 @@ public class AdminNoticeController {
     }
 
     /* 공지 삭제 */
-    @DeleteMapping("/notice/{notice_id}")
+    @DeleteMapping("/{notice_id}")
     public ResponseEntity<ApiResponseDto> deleteNotice(
             @PathVariable Long noticeId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
