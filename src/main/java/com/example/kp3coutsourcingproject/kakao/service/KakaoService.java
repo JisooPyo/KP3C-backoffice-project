@@ -74,7 +74,7 @@ public class KakaoService {
         body.add("client_id", "3f5211af4262100b1a6a78532a532b01");
         // ↑ 3f5211af4262100b1a6a78532a532b01 입력 (Needle application id)
 
-        body.add("redirect_uri", "http://localhost:8080/kp3c/user/kakao/callback");
+        body.add("redirect_uri", "https://localhost:8080/kp3c/user/kakao/callback");
         body.add("code", code);
 
         RequestEntity<MultiValueMap<String, String>> requestEntity = RequestEntity.post(uri)
