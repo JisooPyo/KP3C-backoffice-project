@@ -1,22 +1,21 @@
 package com.example.kp3coutsourcingproject.admin.dto;
 
+import com.example.kp3coutsourcingproject.user.dto.ProfileDto;
 import com.example.kp3coutsourcingproject.user.entity.User;
+import com.example.kp3coutsourcingproject.user.entity.UserRoleEnum;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
-public class AdminUserResponseDto {
+@Setter
+public class AdminUserResponseDto extends ProfileDto {
 
     private Long id;
-    private String username;
-    private String nickname;
-    private String introduction;
-    private String email;
+    private UserRoleEnum role;
 
     public AdminUserResponseDto(User user) {
+        super(user);
         this.id = user.getId();
-        this.username = user.getUsername();
-        this.nickname = user.getNickname();
-        this.introduction = user.getIntroduction();
-        this.email = user.getEmail();
+        this.role = user.getRole();
     }
 }

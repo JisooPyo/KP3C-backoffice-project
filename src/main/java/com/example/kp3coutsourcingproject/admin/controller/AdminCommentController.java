@@ -1,6 +1,6 @@
 package com.example.kp3coutsourcingproject.admin.controller;
 
-import com.example.kp3coutsourcingproject.admin.service.AdminService;
+import com.example.kp3coutsourcingproject.admin.service.AdminCommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/kp3c/manage")
 @RequiredArgsConstructor
 public class AdminCommentController {
-    private final AdminService adminService;
+    private final AdminCommentService adminCommentService;
 
     @GetMapping("/comments")
     public void getComments() { /* 전체 댓글 조회 */ }

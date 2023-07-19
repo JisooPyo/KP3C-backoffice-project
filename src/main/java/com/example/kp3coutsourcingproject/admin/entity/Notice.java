@@ -1,23 +1,17 @@
 package com.example.kp3coutsourcingproject.admin.entity;
 
-import com.example.kp3coutsourcingproject.admin.dto.AdminPostRequestDto;
-import com.example.kp3coutsourcingproject.admin.dto.AdminUserRequestDto;
 import com.example.kp3coutsourcingproject.common.dto.Timestamped;
+import com.example.kp3coutsourcingproject.post.dto.PostRequestDto;
 import com.example.kp3coutsourcingproject.user.entity.User;
 import jakarta.persistence.*;
-import jdk.jfr.Timestamp;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
-@Table(name = "notice")
+@Table(name = "notices")
 @NoArgsConstructor
 public class Notice extends Timestamped {
 
@@ -33,7 +27,7 @@ public class Notice extends Timestamped {
     private User user;
 
 
-    public Notice(AdminPostRequestDto requestDto, User user) {
+    public Notice(PostRequestDto requestDto, User user) {
         this.content = requestDto.getContent();
         this.user = user;
     }
