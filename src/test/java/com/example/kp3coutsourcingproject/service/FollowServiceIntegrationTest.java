@@ -9,7 +9,6 @@ import com.example.kp3coutsourcingproject.user.service.FollowService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 
 import java.util.List;
 
@@ -19,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT) // 서버의 포트를 랜덤으로 설정
 @TestInstance(TestInstance.Lifecycle.PER_CLASS) // 테스트 인스턴스의 생성 단위를 클래스로 변경
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@Rollback(value = false)
 public class FollowServiceIntegrationTest {
     @Autowired
     FollowService followService;
@@ -96,5 +94,18 @@ public class FollowServiceIntegrationTest {
         assertTrue(userBFollowing.isEmpty());
         assertTrue(followService.isFollowing("userC", userA));
         assertFalse(followService.isFollowing("userC", userB));
+    }
+
+    @Test
+    @Order(3)
+    @DisplayName("자기 자신을 팔로우 또는 언팔로우 시도하는 경우")
+    void test3() {
+        IllegalArgumentException followException = assertThrows(IllegalArgumentException.class, () ->
+                followService.follow("userA", userA));
+        assertEquals("자기 자신을 팔로우할 수 없습니다.", followException.getMessage());
+
+        IllegalArgumentException unfollowException = assertThrows(IllegalArgumentException.class, () ->
+                followService.unfollow("userB", userB));
+        assertEquals("자기 자신을 언팔로우할 수 없습니다.", unfollowException.getMessage());
     }
 }
