@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/kp3c/manage")
+@RequestMapping("/kp3c/manage/post")
 @RequiredArgsConstructor
 public class AdminPostController {
     private final AdminPostService adminPostService;
@@ -60,53 +60,5 @@ public class AdminPostController {
         );
     }
 
-    /* 공지 작성 */
-    @PostMapping("/notice")
-    public ResponseEntity<AdminNoticeResponseDto> createNotice(
-            @RequestBody PostRequestDto requestDto,
-            @AuthenticationPrincipal UserDetailsImpl userDetails
-    ) {
-        AdminNoticeResponseDto result = adminPostService.createNotice(requestDto, userDetails.getUser());
-        return ResponseEntity.ok().body(result);
-    }
 
-    /* 전체 공지 조회 */
-    @GetMapping("/notice")
-    public ResponseEntity<List<AdminNoticeResponseDto>> getNotices(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        List<AdminNoticeResponseDto> results = adminPostService.getNotices(userDetails.getUser());
-        return ResponseEntity.ok().body(results);
-    }
-
-    /* 게시글 1개 조회 */
-    @GetMapping("/notice/{notice_id}")
-    public ResponseEntity<AdminNoticeResponseDto> getNotice(
-            @PathVariable Long noticeId,
-            @AuthenticationPrincipal UserDetailsImpl userDetails
-    ) {
-        AdminNoticeResponseDto result = adminPostService.getNotice(noticeId, userDetails.getUser());
-        return ResponseEntity.ok().body(result);
-    }
-
-    /* 공지 수정 */
-    @PutMapping("/notice/{notice_id}")
-    public ResponseEntity<AdminNoticeResponseDto> updateNotice(
-            @PathVariable Long noticeId,
-            @RequestBody PostRequestDto requestDto,
-            @AuthenticationPrincipal UserDetailsImpl userDetails
-    ) {
-        AdminNoticeResponseDto result = adminPostService.updateNotice(noticeId, requestDto, userDetails.getUser());
-        return ResponseEntity.ok().body(result);
-    }
-
-    /* 공지 삭제 */
-    @DeleteMapping("/notice/{notice_id}")
-    public ResponseEntity<ApiResponseDto> deleteNotice(
-            @PathVariable Long noticeId,
-            @AuthenticationPrincipal UserDetailsImpl userDetails
-    ) {
-        adminPostService.deleteNotice(noticeId, userDetails.getUser());
-        return ResponseEntity.ok().body(
-                new ApiResponseDto("삭제가 완료되었습니다.", HttpStatus.OK.value())
-        );
-    }
 }
