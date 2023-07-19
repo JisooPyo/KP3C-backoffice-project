@@ -1,0 +1,41 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 구글클라이언트 id
+            client-secret: 구글 클라이언트 secret
+            scope: profile, email
+
+          naver:
+            client-id: 네이버 클라이언트 id
+            client-secret: 네이버 클라이언트 secret
+            redirection-uri:
+            client-authentication-method: POST
+            authorization-grant-type: authorization_code
+            scope: name, email, profile_image
+            client-name: Naver
+
+          kakao:
+            client-id : 카카오 클라이언트 id
+            client-secret : 카카오 클라이언트 secret
+            redirection-uri : http://localhost:8080/kp3c/user/kakao/callback
+            client-authentication-method: POST
+            authorization-grant-type : authorization_code
+            scope: profile_nickname, email
+            client-name: Kakao
+
+          provider:
+            naver:
+              authorization-uri:
+              token-uri:
+              user-info-uri:
+              user-name-attribute: response
+
+            kakao:
+              authorization-uri: https://kauth.kakao.com/oauth.authorize
+              token-uri: https://kauth.kakao.com/oauth/token
+              user-info-uri: https://kapi.kakao.com/v2/user/me
+              user-name-attribute: id
+
