@@ -55,6 +55,7 @@ public class AdminPostController {
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         adminPostService.deletePost(id, userDetails.getUser());
+
         return ResponseEntity.ok().body(
                 new ApiResponseDto("삭제가 완료되었습니다.", HttpStatus.OK.value())
         );
