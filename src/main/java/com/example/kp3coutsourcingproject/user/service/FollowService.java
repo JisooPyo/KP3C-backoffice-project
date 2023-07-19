@@ -1,6 +1,6 @@
 package com.example.kp3coutsourcingproject.user.service;
 
-import com.example.kp3coutsourcingproject.user.dto.ProfileDto;
+import com.example.kp3coutsourcingproject.user.dto.FollowUserDto;
 import com.example.kp3coutsourcingproject.user.entity.Follow;
 import com.example.kp3coutsourcingproject.user.entity.User;
 import com.example.kp3coutsourcingproject.user.repository.FollowRepository;
@@ -18,21 +18,21 @@ public class FollowService {
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
 
-    public List<ProfileDto> getFollowers(String username) {
+    public List<FollowUserDto> getFollowers(String username) {
         User user = findUser(username);
         return user.getFollowList()
                 .stream()
                 .map(Follow::getFollower)
-                .map(ProfileDto::new)
+                .map(FollowUserDto::new)
                 .toList();
     }
 
-    public List<ProfileDto> getFollowing(String username) {
+    public List<FollowUserDto> getFollowing(String username) {
         User user = findUser(username);
         return user.getFollowingList()
                 .stream()
                 .map(Follow::getFollowee)
-                .map(ProfileDto::new)
+                .map(FollowUserDto::new)
                 .toList();
     }
 

@@ -1,6 +1,6 @@
 package com.example.kp3coutsourcingproject.service;
 
-import com.example.kp3coutsourcingproject.user.dto.ProfileDto;
+import com.example.kp3coutsourcingproject.user.dto.FollowUserDto;
 import com.example.kp3coutsourcingproject.user.entity.User;
 import com.example.kp3coutsourcingproject.user.entity.UserRoleEnum;
 import com.example.kp3coutsourcingproject.user.repository.FollowRepository;
@@ -52,9 +52,9 @@ public class FollowServiceIntegrationTest {
         followService.follow("userC", userA);
 
         //then
-        List<ProfileDto> userCFollowers = followService.getFollowers("userC");
-        List<ProfileDto> userAFollowing = followService.getFollowing("userA");
-        List<ProfileDto> userCFollowing = followService.getFollowing("userC");
+        List<FollowUserDto> userCFollowers = followService.getFollowers("userC");
+        List<FollowUserDto> userAFollowing = followService.getFollowing("userA");
+        List<FollowUserDto> userCFollowing = followService.getFollowing("userC");
 
         assertThat(userCFollowers)
                 .extracting("username")
@@ -79,9 +79,9 @@ public class FollowServiceIntegrationTest {
         followService.unfollow("userC", userB);
 
         //then
-        List<ProfileDto> userCFollowers = followService.getFollowers("userC");
-        List<ProfileDto> userAFollowing = followService.getFollowing("userA");
-        List<ProfileDto> userBFollowing = followService.getFollowing("userB");
+        List<FollowUserDto> userCFollowers = followService.getFollowers("userC");
+        List<FollowUserDto> userAFollowing = followService.getFollowing("userA");
+        List<FollowUserDto> userBFollowing = followService.getFollowing("userB");
 
         assertThat(userCFollowers)
                 .extracting("username")

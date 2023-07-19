@@ -3,7 +3,7 @@ package com.example.kp3coutsourcingproject.user.controller;
 import com.example.kp3coutsourcingproject.common.dto.ApiResponseDto;
 import com.example.kp3coutsourcingproject.common.security.UserDetailsImpl;
 import com.example.kp3coutsourcingproject.user.dto.FollowResponseDto;
-import com.example.kp3coutsourcingproject.user.dto.ProfileDto;
+import com.example.kp3coutsourcingproject.user.dto.FollowUserDto;
 import com.example.kp3coutsourcingproject.user.service.FollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,14 +21,14 @@ public class FollowController {
     private final FollowService followService;
 
     @GetMapping("/users/{username}/followers")
-    public ResponseEntity<List<ProfileDto>> getFollowers(@PathVariable String username) {
-        List<ProfileDto> followers = followService.getFollowers(username);
+    public ResponseEntity<List<FollowUserDto>> getFollowers(@PathVariable String username) {
+        List<FollowUserDto> followers = followService.getFollowers(username);
         return ResponseEntity.ok().body(followers);
     }
 
     @GetMapping("/users/{username}/following")
-    public ResponseEntity<List<ProfileDto>> getFollowing(@PathVariable String username) {
-        List<ProfileDto> following = followService.getFollowing(username);
+    public ResponseEntity<List<FollowUserDto>> getFollowing(@PathVariable String username) {
+        List<FollowUserDto> following = followService.getFollowing(username);
         return ResponseEntity.ok().body(following);
     }
 
