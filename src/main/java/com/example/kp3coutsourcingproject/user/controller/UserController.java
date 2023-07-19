@@ -52,6 +52,7 @@ public class UserController {
     }
 
 
+    @ResponseBody
     @GetMapping("/kakao/callback")
     public String kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
 
