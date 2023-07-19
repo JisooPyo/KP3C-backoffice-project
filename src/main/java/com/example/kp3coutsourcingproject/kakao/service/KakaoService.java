@@ -22,7 +22,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.UUID;
-//123
+
 @Slf4j(topic = "KAKAO Login")
 @Service
 @RequiredArgsConstructor
