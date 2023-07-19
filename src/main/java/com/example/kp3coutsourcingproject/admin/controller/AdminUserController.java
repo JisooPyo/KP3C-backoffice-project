@@ -75,21 +75,21 @@ public class AdminUserController {
         );
     }
 
-    /* 회원 차단 */
-    @PutMapping("/{user_id}/block")
-    public ResponseEntity<ApiResponseDto> blockUser(@PathVariable(value = "user_id") Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        adminUserService.blockUser(userId, userDetails.getUser());
-        return ResponseEntity.ok().body(
-                new ApiResponseDto("회원 차단 완료", HttpStatus.OK.value())
-        );
-    }
-
     /* 회원 삭제 */
     @DeleteMapping("/{user_id}")
     public ResponseEntity<ApiResponseDto> deleteUser(@PathVariable(value = "user_id") Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         adminUserService.deleteUser(userId, userDetails.getUser());
         return ResponseEntity.ok().body(
                 new ApiResponseDto("회원 삭제 완료", HttpStatus.OK.value())
+        );
+    }
+
+    /* 회원 차단 */
+    @PutMapping("/{user_id}/block")
+    public ResponseEntity<ApiResponseDto> blockUser(@PathVariable(value = "user_id") Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        adminUserService.blockUser(userId, userDetails.getUser());
+        return ResponseEntity.ok().body(
+                new ApiResponseDto("회원 차단 완료", HttpStatus.OK.value())
         );
     }
 }
