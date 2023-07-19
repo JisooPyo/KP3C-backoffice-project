@@ -62,7 +62,6 @@ public class KakaoService {
                 .build()
                 .toUri();
 
-
         //HTTP header 생성
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencode;charset=utf-8");
@@ -71,10 +70,10 @@ public class KakaoService {
         /*Json 형태로 요청할 body 를 만드는 것인가?*/
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
-        body.add("client_id", "3f5211af4262100b1a6a78532a532b01");
-        // ↑ 3f5211af4262100b1a6a78532a532b01 입력 (Needle application id)
+        body.add("client_id", "7455eac9bc76a0c055254eea8bc6bb38");
+        // ↑ 7455eac9bc76a0c055254eea8bc6bb38 입력 (Needle application id)
 
-        body.add("redirect_uri", "https://localhost:8080/kp3c/user/kakao/callback");
+        body.add("redirect_uri", "http://localhost:8080/kp3c/user/kakao/callback");
         body.add("code", code);
 
         RequestEntity<MultiValueMap<String, String>> requestEntity = RequestEntity.post(uri)
