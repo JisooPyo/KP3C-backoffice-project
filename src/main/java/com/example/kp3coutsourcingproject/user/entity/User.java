@@ -49,8 +49,7 @@ public class User {
 	private Long kakaoId;
 
 	/*소셜 로그인에 필요해서 넣은부분입니다. - 종우*/
-	@Enumerated(EnumType.STRING)
-	private Role role;
+
 
 	@Enumerated(EnumType.STRING)
 	private SocialType socialType; //kakao, naver, google
@@ -58,7 +57,7 @@ public class User {
 	private String refreshToken; //리프레시 토큰
 
 	public void authorizeUser() {
-		this.role = Role.USER; //왜오류남?
+		this.role =UserRoleEnum.USER;
 	}
 	//비밀번호 암호화 메소드
 	public void passwordEncode(PasswordEncoder passwordEncoder) {
