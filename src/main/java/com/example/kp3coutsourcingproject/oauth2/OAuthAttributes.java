@@ -7,7 +7,7 @@ import com.example.kp3coutsourcingproject.oauth2.userinfo.OAuth2UserInfo;
 import com.example.kp3coutsourcingproject.user.entity.Role;
 import com.example.kp3coutsourcingproject.user.entity.SocialType;
 import lombok.Builder;
-import org.springframework.security.core.userdetails.User;
+import com.example.kp3coutsourcingproject.user.entity.User;
 
 import java.util.Map;
 import java.util.UUID;

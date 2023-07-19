@@ -2,9 +2,7 @@ package com.example.kp3coutsourcingproject.user.entity;
 
 import com.nimbusds.oauth2.sdk.Role;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
@@ -13,8 +11,9 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Builder
 @Table(name = "users")
-@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

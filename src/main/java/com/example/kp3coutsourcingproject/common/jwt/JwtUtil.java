@@ -78,4 +78,7 @@ public class JwtUtil {
 	public Claims getUserInfoFromToken(String token) {
 		return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
 	}
+
+	/*소셜 로그인 때문에 넣은 것들*/
+
 }
