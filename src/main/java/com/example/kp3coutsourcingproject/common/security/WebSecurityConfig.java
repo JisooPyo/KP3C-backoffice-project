@@ -61,7 +61,8 @@ public class WebSecurityConfig {
 		http.authorizeHttpRequests((authorizeHttpRequests) ->
 				authorizeHttpRequests
 						.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
-						.requestMatchers("/kp3c/user/**").permitAll() // '/api/user/'로 시작하는 요청 모두 접근 허가
+						.requestMatchers("/kp3c/user/signup").permitAll() // '/api/user/'로 시작하는 요청 모두 접근 허가
+						.requestMatchers("/kp3c/user/login").permitAll() // '/api/user/'로 시작하는 요청 모두 접근 허가
 						.requestMatchers("/kp3c/manage/**").hasRole("ADMIN") // 관리자="ADMIN"만 /manage 도메인 접근 가능
 						// sns는 보통 로그인 안하면 아무것도 못하니까 일단은 요거만 해놓고
 						// 만약 다른 요청도 접근 허가가 되어야 할 것 같다고 하면 추가 하겠습니다.
