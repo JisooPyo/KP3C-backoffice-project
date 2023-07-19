@@ -1,5 +1,6 @@
 package com.example.kp3coutsourcingproject.user.entity;
 
+import com.example.kp3coutsourcingproject.user.dto.ProfileRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,12 +46,22 @@ public class User {
 	@OneToMany(mappedBy = "follower", cascade = CascadeType.ALL)
 	private List<Follow> followingList = new ArrayList<>();
 
-	public User(String username, String nickname, String password, String introduction, String email, UserRoleEnum role) {
+	@Column(nullable = false)
+	private String imageFile;
+
+	public User(String username, String nickname, String password, String introduction, String email, UserRoleEnum role, String image) {
 		this.username = username;
 		this.nickname = nickname;
 		this.password = password;
 		this.introduction = introduction;
 		this.email = email;
 		this.role = role;
+		this.imageFile = image;
+	}
+
+	public void update(ProfileRequestDto requestDto) {
+		this.nickname = requestDto.getNickname();
+		this.introduction = requestDto.getIntroduction();
+		// this.imageUrl = requestDto.getImageUrl();
 	}
 }

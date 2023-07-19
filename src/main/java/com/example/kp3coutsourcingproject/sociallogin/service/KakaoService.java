@@ -1,6 +1,6 @@
 package com.example.kp3coutsourcingproject.sociallogin.service;
 
-import com.example.kp3coutsourcingproject.jwt.JwtUtil;
+import com.example.kp3coutsourcingproject.common.jwt.JwtUtil;
 import com.example.kp3coutsourcingproject.sociallogin.dto.KakaoUserInfoDto;
 import com.example.kp3coutsourcingproject.user.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,8 +18,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpHeaders;
 
 @Slf4j(topic = "KAKAO Login")
 @Service

@@ -1,11 +1,9 @@
 package com.example.kp3coutsourcingproject.user.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -29,6 +27,9 @@ public class SignupRequestDto {
 
 	@NotBlank
 	private String introduction;
+
+	@NotNull
+	private MultipartFile imageFile;
 
 	private boolean admin = false;
 	private String adminToken = "";

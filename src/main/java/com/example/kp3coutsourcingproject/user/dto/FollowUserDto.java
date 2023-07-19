@@ -6,19 +6,15 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ProfileDto {
+public class FollowUserDto {
+    private Long id;
     private String username;
     private String nickname;
-    private String introduction;
     private String imageUrl;
-    private int followerCount;
-    private int followingCount;
 
-    public ProfileDto(User user) {
+    public FollowUserDto(User user) {
+        this.id = user.getId();
         this.username = user.getUsername();
         this.nickname = user.getNickname();
-        this.introduction = user.getIntroduction();
-        this.followerCount = user.getFollowList().size();
-        this.followingCount = user.getFollowingList().size();
     }
 }
