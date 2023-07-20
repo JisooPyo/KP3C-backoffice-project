@@ -1,4 +1,4 @@
-package com.example.kp3coutsourcingproject.redis.config;
+package com.example.kp3coutsourcingproject.common.redis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;

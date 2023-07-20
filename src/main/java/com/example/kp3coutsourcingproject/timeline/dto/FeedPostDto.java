@@ -1,4 +1,4 @@
-package com.example.kp3coutsourcingproject.redis.dto;
+package com.example.kp3coutsourcingproject.timeline.dto;
 
 import com.example.kp3coutsourcingproject.post.entity.Post;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class RedisPostDto {
+public class FeedPostDto {
     /* 타임라인(피드)에 표시될 정보들 */
     private Long id;
     private String username;
@@ -16,7 +16,7 @@ public class RedisPostDto {
     private String content;
     private LocalDateTime createdAt;
 
-    public RedisPostDto(Post post) {
+    public FeedPostDto(Post post) {
         this.id = post.getId();
         this.username = post.getUser().getUsername();
         this.nickname = post.getUser().getNickname();

@@ -1,4 +1,4 @@
-package com.example.kp3coutsourcingproject.redis.config;
+package com.example.kp3coutsourcingproject.common.redis;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

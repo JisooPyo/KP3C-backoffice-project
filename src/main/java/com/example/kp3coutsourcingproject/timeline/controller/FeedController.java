@@ -1,9 +1,8 @@
-package com.example.kp3coutsourcingproject.redis.controller;
+package com.example.kp3coutsourcingproject.timeline.controller;
 
 import com.example.kp3coutsourcingproject.common.security.UserDetailsImpl;
-import com.example.kp3coutsourcingproject.post.dto.PostResponseDto;
-import com.example.kp3coutsourcingproject.redis.dto.RedisPostDto;
-import com.example.kp3coutsourcingproject.redis.service.RedisTimelineService;
+import com.example.kp3coutsourcingproject.timeline.dto.FeedPostDto;
+import com.example.kp3coutsourcingproject.timeline.service.FeedService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,15 +15,15 @@ import java.util.List;
 @RestController
 @RequestMapping("/redis")
 @RequiredArgsConstructor
-public class RedisTimelineController {
-    private final RedisTimelineService redisTimelineService;
+public class FeedController {
+    private final FeedService timelineService;
 
     /* 타임라인(피드) 게시글 조회 */
     @GetMapping
-    public ResponseEntity<List<RedisPostDto>> getTimelinePosts(
+    public ResponseEntity<List<FeedPostDto>> getTimelinePosts(
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        List<RedisPostDto> results = redisTimelineService.getTimelinePosts(userDetails.getUser());
+        List<FeedPostDto> results = timelineService.getTimelinePosts(userDetails.getUser());
         return ResponseEntity.ok().body(results);
     }
 }
