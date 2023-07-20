@@ -1,10 +1,10 @@
-package com.example.kp3coutsourcingproject.timeline.service;
+package com.example.kp3coutsourcingproject.feed.service;
 
 import com.example.kp3coutsourcingproject.post.entity.Post;
 import com.example.kp3coutsourcingproject.post.repository.PostRepository;
-import com.example.kp3coutsourcingproject.timeline.dto.FeedPostDto;
-import com.example.kp3coutsourcingproject.timeline.dto.FeedResponseDto;
-import com.example.kp3coutsourcingproject.timeline.repository.FeedRepository;
+import com.example.kp3coutsourcingproject.feed.dto.FeedPostDto;
+import com.example.kp3coutsourcingproject.feed.dto.FeedResponseDto;
+import com.example.kp3coutsourcingproject.feed.repository.FeedRepository;
 import com.example.kp3coutsourcingproject.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.ListOperations;

@@ -1,4 +1,4 @@
-package com.example.kp3coutsourcingproject.timeline.dto;
+package com.example.kp3coutsourcingproject.feed.dto;
 
 import com.example.kp3coutsourcingproject.post.entity.Post;
 import lombok.Getter;

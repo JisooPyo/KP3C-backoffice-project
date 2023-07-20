@@ -1,4 +1,4 @@
-package com.example.kp3coutsourcingproject.timeline.entity;
+package com.example.kp3coutsourcingproject.feed.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

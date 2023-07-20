@@ -1,6 +1,6 @@
-package com.example.kp3coutsourcingproject.timeline.entity;
+package com.example.kp3coutsourcingproject.feed.entity;
 
-import com.example.kp3coutsourcingproject.timeline.dto.FeedPostDto;
+import com.example.kp3coutsourcingproject.feed.dto.FeedPostDto;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;

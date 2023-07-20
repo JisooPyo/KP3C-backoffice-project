@@ -1,9 +1,9 @@
-package com.example.kp3coutsourcingproject.timeline.controller;
+package com.example.kp3coutsourcingproject.feed.controller;
 
 import com.example.kp3coutsourcingproject.common.security.UserDetailsImpl;
-import com.example.kp3coutsourcingproject.timeline.dto.FeedPostDto;
-import com.example.kp3coutsourcingproject.timeline.dto.FeedResponseDto;
-import com.example.kp3coutsourcingproject.timeline.service.FeedService;
+import com.example.kp3coutsourcingproject.feed.dto.FeedPostDto;
+import com.example.kp3coutsourcingproject.feed.dto.FeedResponseDto;
+import com.example.kp3coutsourcingproject.feed.service.FeedService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

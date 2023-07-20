@@ -5,7 +5,7 @@ import com.example.kp3coutsourcingproject.common.dto.ApiResponseDto;
 import com.example.kp3coutsourcingproject.common.security.UserDetailsImpl;
 import com.example.kp3coutsourcingproject.post.dto.PostRequestDto;
 import com.example.kp3coutsourcingproject.post.dto.PostResponseDto;
-import com.example.kp3coutsourcingproject.timeline.service.FeedService;
+import com.example.kp3coutsourcingproject.feed.service.FeedService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
