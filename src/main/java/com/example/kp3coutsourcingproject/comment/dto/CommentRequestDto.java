@@ -6,5 +6,7 @@ import lombok.Getter;
 @Getter
 public class CommentRequestDto {
 	@NotBlank
+	private Long parentId;
+	@NotBlank
 	private String content;
 }

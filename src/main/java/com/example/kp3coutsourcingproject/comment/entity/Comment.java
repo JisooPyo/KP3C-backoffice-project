@@ -1,18 +1,22 @@
 package com.example.kp3coutsourcingproject.comment.entity;
 
+import com.example.kp3coutsourcingproject.common.dto.Timestamped;
 import com.example.kp3coutsourcingproject.post.entity.Post;
 import com.example.kp3coutsourcingproject.user.entity.User;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
+@Builder
 @Getter
 @Setter
 @Table
 @NoArgsConstructor
-public class Comment {
+@AllArgsConstructor
+public class Comment extends Timestamped {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "postId",nullable = false)
 	private Post post;
@@ -21,6 +25,10 @@ public class Comment {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "parentId",nullable = false)
+	private Comment parent;
+
 	@Column(nullable = false,length = 280)
 	private String content;
 
@@ -28,14 +36,7 @@ public class Comment {
 	@JoinColumn(name = "userId",nullable = false)
 	private User user;
 
-
-}
-/*
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="parentId")
-	private Post parent;
-
 	@Builder.Default
-	@OneToMany(mappedBy = "parent", orphanRemoval = true)
-	private List<Post> children = new ArrayList<>();
- */
+	@OneToMany(mappedBy = "parent",orphanRemoval = true)
+	private List<Comment> children = new ArrayList<>();
+}
