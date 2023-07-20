@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 public class PostResponseDto extends ApiResponseDto {
 	private Long id;
+	private String username;
 	private String nickname;
 	private String content;
 	private LocalDateTime createdAt;
@@ -16,6 +17,7 @@ public class PostResponseDto extends ApiResponseDto {
 
 	public PostResponseDto(Post post) {
 		this.id = post.getId();
+		this.username=post.getUser().getUsername();
 		this.nickname = post.getUser().getNickname();
 		this.content = post.getContent();
 		this.createdAt = post.getCreatedAt();
