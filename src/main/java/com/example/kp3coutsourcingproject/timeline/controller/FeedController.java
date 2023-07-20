@@ -2,6 +2,7 @@ package com.example.kp3coutsourcingproject.timeline.controller;
 
 import com.example.kp3coutsourcingproject.common.security.UserDetailsImpl;
 import com.example.kp3coutsourcingproject.timeline.dto.FeedPostDto;
+import com.example.kp3coutsourcingproject.timeline.dto.FeedResponseDto;
 import com.example.kp3coutsourcingproject.timeline.service.FeedService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,14 +17,22 @@ import java.util.List;
 @RequestMapping("/redis")
 @RequiredArgsConstructor
 public class FeedController {
-    private final FeedService timelineService;
+    private final FeedService feedService;
 
     /* 타임라인(피드) 게시글 조회 */
-    @GetMapping
-    public ResponseEntity<List<FeedPostDto>> getTimelinePosts(
+    @GetMapping("/my")
+    public ResponseEntity<List<FeedPostDto>> getMyLastCreatedPosts(
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        List<FeedPostDto> results = timelineService.getTimelinePosts(userDetails.getUser());
+        List<FeedPostDto> results = feedService.getMyLastCreatedPosts(userDetails.getUser());
         return ResponseEntity.ok().body(results);
+    }
+
+    @GetMapping("/feed")
+    public ResponseEntity<FeedResponseDto> getMyFeed(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        FeedResponseDto result = feedService.getMyFeed(userDetails.getUser());
+        return ResponseEntity.ok().body(result);
     }
 }

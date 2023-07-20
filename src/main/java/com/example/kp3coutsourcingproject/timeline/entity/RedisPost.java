@@ -8,8 +8,8 @@ import org.springframework.data.redis.core.RedisHash;
 @Getter @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@RedisHash("post")
-public class FeedPost {
+@RedisHash("redis_post")
+public class RedisPost {
     @Id
     private String userId; // key
     private FeedPostDto feedPostDto; // value
