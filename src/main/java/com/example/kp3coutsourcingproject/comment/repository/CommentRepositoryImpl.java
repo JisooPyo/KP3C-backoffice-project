@@ -11,7 +11,7 @@ import java.util.List;
 public class CommentRepositoryImpl implements CommentCustomRepository{
 
 	@Override
-	public List<Comment> getComments(Long postId) {
+	public List<Comment> getCommentsByPostId(Long postId) {
 		return null;
 	}
 }

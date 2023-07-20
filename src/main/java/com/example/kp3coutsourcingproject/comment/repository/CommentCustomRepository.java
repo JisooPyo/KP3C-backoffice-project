@@ -5,5 +5,5 @@ import com.example.kp3coutsourcingproject.comment.entity.Comment;
 import java.util.List;
 
 public interface CommentCustomRepository {
-	List<Comment> getComments(Long postId);
+	List<Comment> getCommentsByPostId(Long postId);
 }
