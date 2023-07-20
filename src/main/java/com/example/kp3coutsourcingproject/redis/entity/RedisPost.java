@@ -1,6 +1,6 @@
-package com.example.kp3coutsourcingproject.feed.entity;
+package com.example.kp3coutsourcingproject.redis.entity;
 
-import com.example.kp3coutsourcingproject.feed.dto.FeedPostDto;
+import com.example.kp3coutsourcingproject.redis.dto.RedisPostDto;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
@@ -12,5 +12,5 @@ import org.springframework.data.redis.core.RedisHash;
 public class RedisPost {
     @Id
     private String userId; // key
-    private FeedPostDto feedPostDto; // value
+    private RedisPostDto redisPostDto; // value
 }
