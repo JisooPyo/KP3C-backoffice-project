@@ -1,0 +1,7 @@
+oauth2:
+  google:
+    client-id: 883622715290-hlnj8g6snt2q8rhpeu114akt8p92l996.apps.googleusercontent.com
+    client-secret: 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
+    redirect-uri: http://localhost:8080/login/oauth2/code/google
+    token-uri: https://oauth2.googleapis.com/token
+    resource-uri: https://www.googleapis.com/oauth2/v2/userinfo

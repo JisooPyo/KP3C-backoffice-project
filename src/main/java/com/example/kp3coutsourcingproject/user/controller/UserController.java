@@ -3,7 +3,7 @@ package com.example.kp3coutsourcingproject.user.controller;
 import com.example.kp3coutsourcingproject.common.file.FileStore;
 import com.example.kp3coutsourcingproject.common.jwt.JwtUtil;
 import com.example.kp3coutsourcingproject.common.security.UserDetailsImpl;
-import com.example.kp3coutsourcingproject.sociallogin.service.KakaoService;
+import com.example.kp3coutsourcingproject.oauth2.kakao.service.KakaoService;
 import com.example.kp3coutsourcingproject.user.dto.SignupRequestDto;
 import com.example.kp3coutsourcingproject.user.dto.UserProfileRequestDto;
 import com.example.kp3coutsourcingproject.user.dto.UserProfileResponseDto;

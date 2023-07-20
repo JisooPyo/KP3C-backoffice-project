@@ -1,4 +1,4 @@
-package com.example.kp3coutsourcingproject.sociallogin.dto;
+package com.example.kp3coutsourcingproject.oauth2.kakao.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

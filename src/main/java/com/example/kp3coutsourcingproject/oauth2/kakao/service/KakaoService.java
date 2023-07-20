@@ -1,7 +1,7 @@
-package com.example.kp3coutsourcingproject.sociallogin.service;
+package com.example.kp3coutsourcingproject.oauth2.kakao.service;
 
 import com.example.kp3coutsourcingproject.common.jwt.JwtUtil;
-import com.example.kp3coutsourcingproject.sociallogin.dto.KakaoUserInfoDto;
+import com.example.kp3coutsourcingproject.oauth2.kakao.dto.KakaoUserInfoDto;
 import com.example.kp3coutsourcingproject.user.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
