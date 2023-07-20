@@ -2,6 +2,7 @@ package com.example.kp3coutsourcingproject.redis.controller;
 
 import com.example.kp3coutsourcingproject.common.security.UserDetailsImpl;
 import com.example.kp3coutsourcingproject.post.dto.PostResponseDto;
+import com.example.kp3coutsourcingproject.redis.dto.RedisPostDto;
 import com.example.kp3coutsourcingproject.redis.service.RedisTimelineService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +21,10 @@ public class RedisTimelineController {
 
     /* 타임라인(피드) 게시글 조회 */
     @GetMapping
-    public ResponseEntity<List<PostResponseDto>> getTimelinePosts(
+    public ResponseEntity<List<RedisPostDto>> getTimelinePosts(
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        List<PostResponseDto> results = redisTimelineService.getTimelinePosts(userDetails.getUser());
+        List<RedisPostDto> results = redisTimelineService.getTimelinePosts(userDetails.getUser());
         return ResponseEntity.ok().body(results);
     }
 }

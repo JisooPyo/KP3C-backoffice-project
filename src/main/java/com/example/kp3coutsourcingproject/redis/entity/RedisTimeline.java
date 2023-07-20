@@ -1,22 +1,16 @@
 package com.example.kp3coutsourcingproject.redis.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.example.kp3coutsourcingproject.redis.dto.RedisPostDto;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
-@Getter
+@Getter @ToString
 @NoArgsConstructor
+@AllArgsConstructor
 @RedisHash("timeline")
 public class RedisTimeline {
     @Id
     private String userId; // key
-    private String postId;
-
-    @Builder
-    public RedisTimeline(String userId, String postId) {
-        this.userId = userId;
-        this.postId = postId;
-    }
+    private RedisPostDto redisPostDto; // value
 }
