@@ -2,7 +2,7 @@ package com.example.kp3coutsourcingproject.user.controller;
 
 import com.example.kp3coutsourcingproject.common.dto.ApiResponseDto;
 import com.example.kp3coutsourcingproject.common.jwt.JwtUtil;
-import com.example.kp3coutsourcingproject.sociallogin.service.KakaoService;
+import com.example.kp3coutsourcingproject.kakao.service.KakaoService;
 import com.example.kp3coutsourcingproject.user.dto.SignupRequestDto;
 import com.example.kp3coutsourcingproject.user.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -49,11 +49,7 @@ public class UserController {
 
     @GetMapping("/kakao/callback")
     public String kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
-
-        // code: 카카오 서버로부터 받은 인가코드 service 전달 후 인증처리 및 JWT반환
         String token = kakaoService.kakaoLogin(code);
-
-        // cookie 생성 및 직접 브라우저에 set
         Cookie cookie = new Cookie(JwtUtil.AUTHORIZATION_HEADER, token.substring(7));
         cookie.setPath("/");
         response.addCookie(cookie);
