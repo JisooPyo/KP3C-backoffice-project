@@ -1,16 +1,12 @@
 package com.example.kp3coutsourcingproject.user.controller;
 
 import com.example.kp3coutsourcingproject.common.file.FileStore;
-import com.example.kp3coutsourcingproject.common.jwt.JwtUtil;
 import com.example.kp3coutsourcingproject.common.security.UserDetailsImpl;
-import com.example.kp3coutsourcingproject.oauth2.kakao.service.KakaoService;
+import com.example.kp3coutsourcingproject.oauth2.kakao.service.KakaoLoginService;
 import com.example.kp3coutsourcingproject.user.dto.SignupRequestDto;
 import com.example.kp3coutsourcingproject.user.dto.UserProfileRequestDto;
 import com.example.kp3coutsourcingproject.user.dto.UserProfileResponseDto;
 import com.example.kp3coutsourcingproject.user.service.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,22 +30,10 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final KakaoService kakaoService;
+    private final KakaoLoginService kakaoService;
     private final FileStore fileStore;
 
-    @GetMapping("/kakao/callback")
-    public String kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
 
-        // code: 카카오 서버로부터 받은 인가코드 service 전달 후 인증처리 및 JWT반환
-        String token = kakaoService.kakaoLogin(code);
-
-        // cookie 생성 및 직접 브라우저에 set
-        Cookie cookie = new Cookie(JwtUtil.AUTHORIZATION_HEADER, token.substring(7));
-        cookie.setPath("/");
-        response.addCookie(cookie);
-
-        return "redirect:/";
-    }
 
     // 회원가입 프론트엔드와 연결
     @GetMapping("/signup")

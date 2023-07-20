@@ -22,7 +22,7 @@ import java.net.URI;
 @Slf4j(topic = "KAKAO Login")
 @Service
 @RequiredArgsConstructor
-public class KakaoService {
+public class KakaoLoginService {
 
     // 주입받을 것들
 //    private final PasswordEncoder passwordEncoder;
@@ -55,7 +55,7 @@ public class KakaoService {
         //HTTP Body 생성
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
-        body.add("client_id", "본인의 REST API키"); //3f5211af4262100b1a6a78532a532b01 입력
+        body.add("client_id", "7455eac9bc76a0c055254eea8bc6bb38"); //7455eac9bc76a0c055254eea8bc6bb38 입력
         body.add("redirect_uri", "http://localhost:8080/kp3c/user/kakao/callback");
         body.add("code", code);
 

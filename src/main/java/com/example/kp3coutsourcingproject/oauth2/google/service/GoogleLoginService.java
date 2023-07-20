@@ -9,12 +9,12 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-public class LoginService {
+public class GoogleLoginService {
 
     private final Environment env;
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public LoginService(Environment env) {
+    public GoogleLoginService(Environment env) {
         this.env = env;
     }
 
