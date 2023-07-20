@@ -20,21 +20,21 @@ import java.util.List;
 public class PostController {
 	private final PostService postService;
 
-	// 포스트 전체 조회
+	// 홈피드(유저 작성 글 + 유저가 팔로잉한 글)
 	// http://localhost:8080/kp3c/posts
 	@GetMapping("/posts")
-	public ResponseEntity<List<PostResponseDto>> getPosts() {
-		List<PostResponseDto> results = postService.getPosts();
+	public ResponseEntity<List<PostResponseDto>> getHomeFeed(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		List<PostResponseDto> results = postService.getHomeFeed(userDetails.getUser());
 
 		return ResponseEntity.ok().body(results);
 	}
 
-	// 선택 포스트 조회
+	// 자기피드(유저 작성 글만)
 	// http://localhost:8080/kp3c/post/1
-	@GetMapping("/post/{id}")
-	public ResponseEntity<PostResponseDto> getPostById(@PathVariable Long id) {
-		PostResponseDto result = postService.getPostById(id);
-		return ResponseEntity.ok().body(result);
+	@GetMapping("/post")
+	public ResponseEntity<List<PostResponseDto>> getMyFeed(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		List<PostResponseDto> results = postService.getMyFeed(userDetails.getUser());
+		return ResponseEntity.ok().body(results);
 	}
 
 	// 포스트 작성

@@ -1,5 +1,6 @@
 package com.example.kp3coutsourcingproject.post.entity;
 
+import com.example.kp3coutsourcingproject.comment.entity.Comment;
 import com.example.kp3coutsourcingproject.common.dto.Timestamped;
 import com.example.kp3coutsourcingproject.post.dto.PostRequestDto;
 import com.example.kp3coutsourcingproject.user.entity.User;
@@ -28,17 +29,8 @@ public class Post extends Timestamped {
 	@Column(nullable = false)
 	private String content;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="parentId")
-	private Post parent;
-
-	@Builder.Default
-	@OneToMany(mappedBy = "parent", orphanRemoval = true)
-	private List<Post> children = new ArrayList<>();
-
-	public Post(PostRequestDto requestDto) {
-		this.content = requestDto.getContent();
-	}
+	@OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+	private List<Comment> comments;
 
 	public void update(PostRequestDto requestDto) {
 		this.content = requestDto.getContent();

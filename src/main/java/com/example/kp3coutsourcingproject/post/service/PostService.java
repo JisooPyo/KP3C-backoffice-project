@@ -21,8 +21,8 @@ public class PostService {
 	private final UserRepository userRepository;
 
 	// 전체 포스트 조회
-	public List<PostResponseDto> getPosts() {
-		List<PostResponseDto> posts = postRepository.findAll().stream()
+	public List<PostResponseDto> getHomeFeed(User user) {
+		List<PostResponseDto> posts = postRepository.getHomeFeed(user.getId()).stream()
 				.map(PostResponseDto::new)
 				.collect(Collectors.toList());
 
@@ -30,16 +30,21 @@ public class PostService {
 	}
 
 	// 선택 포스트 조회
-	public PostResponseDto getPostById(Long id) {
-		Post post = findPost(id);
-		return new PostResponseDto(post);
+	public List<PostResponseDto> getMyFeed(User user) {
+		List<PostResponseDto> posts = postRepository.getUserFeed(user.getId()).stream()
+				.map(PostResponseDto::new)
+				.collect(Collectors.toList());
+
+		return posts;
 	}
 
 	// 포스트 작성
 	public PostResponseDto createPost(PostRequestDto requestDto, User user) {
 		User targetUser = findUser(user.getId());
-		Post post = new Post(requestDto);
-		post.setUser(targetUser);
+		Post post = Post.builder()
+				.user(targetUser)
+				.content(requestDto.getContent())
+				.build();
 		postRepository.save(post);
 		return new PostResponseDto(post);
 	}
@@ -50,7 +55,7 @@ public class PostService {
 		Post post = findPost(id);
 		User targetUser = findUser(user.getId());
 		// 게시글 작성자인지 체크
-		if(isPostAuthor(post,targetUser)){
+		if (isPostAuthor(post, targetUser)) {
 			post.setContent(requestDto.getContent());
 			return new PostResponseDto(post);
 		} else {
@@ -62,7 +67,7 @@ public class PostService {
 	public void deletePost(Long id, User user) {
 		Post post = findPost(id);
 		User targetUser = findUser(user.getId());
-		if(isPostAuthor(post,targetUser)){
+		if (isPostAuthor(post, targetUser)) {
 			postRepository.deleteById(id);
 		} else {
 			throw new IllegalArgumentException("게시글 작성자만이 게시글을 삭제할 수 있습니다.");
@@ -70,6 +75,11 @@ public class PostService {
 	}
 
 	/////////////////////////////////////////////////////////
+
+	// id값으로 부모 post 찾기
+	private Post findParent(long id) {
+		return postRepository.findById(id).orElse(null);
+	}
 
 	// id값으로 post 찾기
 	private Post findPost(long id) {
@@ -86,8 +96,8 @@ public class PostService {
 	}
 
 	// 게시글의 작성자가 유저인지 확인
-	private boolean isPostAuthor(Post post, User user){
-		if(post.getUser().getId().equals(user.getId())){
+	private boolean isPostAuthor(Post post, User user) {
+		if (post.getUser().getId().equals(user.getId())) {
 			return true;
 		} else {
 			return false;
