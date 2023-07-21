@@ -1,6 +1,5 @@
 package com.example.kp3coutsourcingproject.post.entity;
 
-import com.example.kp3coutsourcingproject.comment.entity.Comment;
 import com.example.kp3coutsourcingproject.common.dto.Timestamped;
 import com.example.kp3coutsourcingproject.post.dto.PostRequestDto;
 import com.example.kp3coutsourcingproject.user.entity.User;
