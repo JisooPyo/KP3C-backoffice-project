@@ -2,11 +2,13 @@ package com.example.kp3coutsourcingproject.user.controller;
 
 import com.example.kp3coutsourcingproject.common.file.FileStore;
 import com.example.kp3coutsourcingproject.common.jwt.JwtUtil;
+import com.example.kp3coutsourcingproject.common.jwt.TokenResponse;
 import com.example.kp3coutsourcingproject.common.security.UserDetailsImpl;
-import com.example.kp3coutsourcingproject.sociallogin.service.KakaoService;
+import com.example.kp3coutsourcingproject.kakao.service.KakaoService;
 import com.example.kp3coutsourcingproject.user.dto.SignupRequestDto;
 import com.example.kp3coutsourcingproject.user.dto.UserProfileRequestDto;
 import com.example.kp3coutsourcingproject.user.dto.UserProfileResponseDto;
+import com.example.kp3coutsourcingproject.user.entity.User;
 import com.example.kp3coutsourcingproject.user.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.Cookie;
@@ -35,20 +37,24 @@ public class UserController {
 
     private final UserService userService;
     private final KakaoService kakaoService;
+    private final JwtUtil jwtUtil;
     private final FileStore fileStore;
 
+    @GetMapping("/reissue")
+    @ResponseBody
+    public TokenResponse reissueToken(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        User user = userDetails.getUser();
+        return jwtUtil.reissueToken(user.getEmail(), user.getRole());
+    }
+
     @GetMapping("/kakao/callback")
-    public String kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
-
-        // code: 카카오 서버로부터 받은 인가코드 service 전달 후 인증처리 및 JWT반환
-        String token = kakaoService.kakaoLogin(code);
-
-        // cookie 생성 및 직접 브라우저에 set
-        Cookie cookie = new Cookie(JwtUtil.AUTHORIZATION_HEADER, token.substring(7));
+    @ResponseBody
+    public TokenResponse kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+        TokenResponse tokenResponse = kakaoService.kakaoLogin(code);
+        Cookie cookie = new Cookie(JwtUtil.AUTHORIZATION_HEADER, tokenResponse.getAccessToken());
         cookie.setPath("/");
         response.addCookie(cookie);
-
-        return "redirect:/";
+        return tokenResponse;
     }
 
     // 회원가입 프론트엔드와 연결

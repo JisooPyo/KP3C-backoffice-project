@@ -1,6 +1,7 @@
 package com.example.kp3coutsourcingproject.kakao.service;
 
 import com.example.kp3coutsourcingproject.common.jwt.JwtUtil;
+import com.example.kp3coutsourcingproject.common.jwt.TokenResponse;
 import com.example.kp3coutsourcingproject.kakao.dto.KakaoUserInfoDto;
 import com.example.kp3coutsourcingproject.user.entity.User;
 import com.example.kp3coutsourcingproject.user.entity.UserRoleEnum;
@@ -37,11 +38,12 @@ public class KakaoService {
     @Value("${kakao-rest-api-key}")
     private String CLIENT_ID;
 
-    public String kakaoLogin(String code) throws JsonProcessingException {
-        String accessToken = getToken(code);
-        KakaoUserInfoDto kakaoUserInfo = getKakaoUserInfo(accessToken);
+    public TokenResponse kakaoLogin(String code) throws JsonProcessingException {
+        String kakaoToken = getToken(code);
+        KakaoUserInfoDto kakaoUserInfo = getKakaoUserInfo(kakaoToken);
         User kakaoUser = registerKakaoUserIfNeeded(kakaoUserInfo);
-        return jwtUtil.createToken(kakaoUser.getUsername(), kakaoUser.getRole());
+
+        return jwtUtil.issueToken(kakaoUser.getEmail(), kakaoUser.getRole());
     }
 
     private String getToken(String code) throws JsonProcessingException {
