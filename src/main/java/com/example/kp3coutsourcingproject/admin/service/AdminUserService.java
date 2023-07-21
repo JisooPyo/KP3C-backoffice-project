@@ -10,6 +10,10 @@ import com.example.kp3coutsourcingproject.user.entity.UserRoleEnum;
 import com.example.kp3coutsourcingproject.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,15 +29,19 @@ public class AdminUserService {
     private final PostRepository postRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public List<AdminUserResponseDto> getUsers(User admin) {
+    public Page<AdminUserResponseDto> getUsers(User admin, int page, int size, String sortBy, boolean isAsc) {
         // 회원 권한 확인
         if (!isAdmin(admin)) {
             throw new IllegalArgumentException("관리자 권한이 있어야만 해당 요청을 실행할 수 있습니다.");
         }
+        // 페이징 기능
+        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, sortBy);
+        Pageable pageable = PageRequest.of(page, size, sort);
 
         // 유저 전체 찾아서 responseDto로 반환
-        List<User> users = userRepository.findAll().stream().toList();
-        return users.stream().map(AdminUserResponseDto::new).toList();
+        Page<User> userList = userRepository.findAll(pageable);
+        return userList.map(AdminUserResponseDto::new);
     }
 
     public AdminUserResponseDto getUser(Long userId, User admin) {

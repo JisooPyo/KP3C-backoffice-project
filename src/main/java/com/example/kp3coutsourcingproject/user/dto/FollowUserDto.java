@@ -16,5 +16,6 @@ public class FollowUserDto {
         this.id = user.getId();
         this.username = user.getUsername();
         this.nickname = user.getNickname();
+        this.imageUrl = user.getImageFile();
     }
 }
