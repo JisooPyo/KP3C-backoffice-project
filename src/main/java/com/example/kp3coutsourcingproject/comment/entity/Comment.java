@@ -18,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Comment extends Timestamped {
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "postId",nullable = false)
+	@JoinColumn(name = "postId", nullable = false)
 	private Post post;
 
 	@Id
@@ -26,17 +26,21 @@ public class Comment extends Timestamped {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "parentId",nullable = false)
+	@JoinColumn(name = "parentId")
 	private Comment parent;
 
-	@Column(nullable = false,length = 280)
+	@Column(nullable = false, length = 280)
 	private String content;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "userId",nullable = false)
+	@JoinColumn(name = "userId", nullable = false)
 	private User user;
 
 	@Builder.Default
-	@OneToMany(mappedBy = "parent",orphanRemoval = true)
+	@OneToMany(mappedBy = "parent", orphanRemoval = true)
 	private List<Comment> children = new ArrayList<>();
+
+	public void updateParent(Comment parent) {
+		this.parent = parent;
+	}
 }

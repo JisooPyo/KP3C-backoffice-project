@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/posts")
+@RequestMapping("/kp3c/post")
 public class CommentController {
 	private final CommentService commentService;
 
@@ -27,11 +27,11 @@ public class CommentController {
 	}
 
 	// 댓글 작성
-	@PostMapping("{postId}/comment")
-	public ResponseEntity<CommentResponseDto> createComment(@PathVariable Long postId,
+	@PostMapping("{id}/comment")	// id로 바꾸기
+	public ResponseEntity<CommentResponseDto> createComment(@PathVariable Long id,
 															@RequestBody CommentRequestDto requestDto,
 															@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		CommentResponseDto result = commentService.createComment(postId, requestDto, userDetails.getUser());
+		CommentResponseDto result = commentService.createComment(id, requestDto, userDetails.getUser());
 		return ResponseEntity.ok().body(result);
 	}
 
