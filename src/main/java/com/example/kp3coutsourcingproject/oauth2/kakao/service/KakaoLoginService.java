@@ -1,32 +1,130 @@
 package com.example.kp3coutsourcingproject.oauth2.kakao.service;
 
-import com.example.kp3coutsourcingproject.common.jwt.JwtUtil;
+import com.example.kp3coutsourcingproject.common.security.UserDetailsImpl;
 import com.example.kp3coutsourcingproject.oauth2.kakao.dto.KakaoUserInfoDto;
+import com.example.kp3coutsourcingproject.user.entity.User;
+import com.example.kp3coutsourcingproject.user.entity.UserRoleEnum;
 import com.example.kp3coutsourcingproject.user.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.env.Environment;
+import org.springframework.http.*;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URI;
+import java.util.UUID;
 
 @Slf4j(topic = "KAKAO Login")
 @Service
 @RequiredArgsConstructor
 public class KakaoLoginService {
-     public void socialLogin(String code, String registrationId ){
-         System.out.println("code = " + code);
-         System.out.println("registrationId = " + registrationId);
-     }
+    private final Environment env;
+    private final RestTemplate restTemplate = new RestTemplate();
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public void kakaoSocialLogin(String code, String registrationId) {
+        String accessToken = kakaoGetAccessToken(code, registrationId);
+        JsonNode userResourceNode = kakaoGetUserResource(accessToken, registrationId);
+        System.out.println("userResourceNode = " + userResourceNode);
+
+        String kakaoId = userResourceNode.get("id").asText();
+        String kakaoEmail = userResourceNode.get("kakao_account").get("email").asText();
+        String kakaoNickname = userResourceNode.get("properties").get("nickname").asText();
+        System.out.println("id = " + kakaoId);
+        System.out.println("Email = " + kakaoEmail);
+        System.out.println("Nickname = " + kakaoNickname);
+    }
+
+    private String kakaoGetAccessToken(String authorizationCode, String registrationId) {
+        String clientId = env.getProperty("oauth2." + registrationId + ".client-id");
+        String clientSecret = env.getProperty("oauth2." + registrationId + ".client-secret");
+        String redirectUri = env.getProperty("oauth2." + registrationId + ".redirect-uri");
+        String tokenUri = env.getProperty("oauth2." + registrationId + ".token-uri");
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("code", authorizationCode);
+        params.add("client_id", clientId);
+        params.add("client_secret", clientSecret);
+        params.add("redirect_uri", redirectUri);
+        params.add("grant_type", "authorization_code");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        HttpEntity entity = new HttpEntity(params, headers);
+
+        ResponseEntity<JsonNode> responseNode = restTemplate.exchange(tokenUri, HttpMethod.POST, entity, JsonNode.class);
+        JsonNode accessTokenNode = responseNode.getBody();
+        return accessTokenNode.get("access_token").asText();
+    }
+
+    private JsonNode kakaoGetUserResource(String accessToken, String registrationId) {
+        String resourceUri = env.getProperty("oauth2." + registrationId + ".resource-uri");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + accessToken);
+        HttpEntity entity = new HttpEntity(headers);
+        return restTemplate.exchange(resourceUri, HttpMethod.GET, entity, JsonNode.class).getBody();
+    }
+
+//    public void kakaoLogin(String code, String registraionId) throws JsonProcessingException {
+//        String accessToken = kakaoGetAccessToken(code, registraionId);
+//
+//        KakaoUserInfoDto kakaoUserInfo = kakaoGetUserResource(accessToken);
+//
+//        User kakaoUser = registerKakaoUserIfNeeded(kakaoUserInfo);
+//
+//        forceLogin(kakaoUser);
+//    }
+
+//    private User registerKakaoUserIfNeeded(KakaoUserInfoDto kakaoUserInfo) {
+//        //db에 중복 id확인
+//
+//        Long kakaoId = kakaoUserInfo.getId();
+//        User kakaoUser = userRepository.findByKakaoId(kakaoId).orElse(null);
+//        if (kakaoUser == null) {
+//            String kakaoEmail = kakaoUserInfo.getEmail();
+//            User sameEmailUser = userRepository.findByEmail(kakaoEmail).orElse(null);
+//            if (sameEmailUser != null) {
+//                kakaoUser = sameEmailUser;
+//                kakaoUser.setKakaoId(kakaoId);
+//            }else {
+//                //신규
+//                String nickname = kakaoUserInfo.getNickname();
+//
+//                String password = UUID.randomUUID().toString();
+//                String encodedPassword = passwordEncoder.encode(password);
+//
+//                String email = kakaoUserInfo.getEmail();
+//
+//                UserRoleEnum role = UserRoleEnum.USER;
+//
+//                kakaoUser = new User(nickname, encodedPassword, email, role, kakaoId);
+//            }
+//
+//            userRepository.save(kakaoUser);
+//
+//            }
+//        return kakaoUser;
+//        }
+//
+//        private void forceLogin(User kakaoUser) {
+//            UserDetails userDetails = new UserDetailsImpl(kakaoUser);
+//            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+//            SecurityContextHolder.getContext().setAuthentication(authentication);
+//
+//}
 
 //    // 주입받을 것들
 ////    private final PasswordEncoder passwordEncoder;

@@ -1,10 +1,11 @@
 package com.example.kp3coutsourcingproject.oauth2.kakao.controller;
 
 import com.example.kp3coutsourcingproject.oauth2.kakao.service.KakaoLoginService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/kp3c/user", produces = "application/json")
+@RequestMapping(value = "/login/oauth2", produces = "application/json")
 public class KakaoLoginController {
     KakaoLoginService kakaoService;
 
@@ -12,10 +13,19 @@ public class KakaoLoginController {
         this.kakaoService = kakaoService;
     }
 
-    @GetMapping("/kakao/{registrationId}")
-    public void kakaologin(@RequestParam String code, @PathVariable String registrationId) {
-        kakaoService.socialLogin(code, registrationId);
+    @GetMapping("/kakaocode/{registrationId}")
+    public void kakaoLogin(@RequestParam String code, @PathVariable String registrationId) {
+        kakaoService.kakaoSocialLogin(code, registrationId);
     }
+
+//    @GetMapping("/kp3c/user/kakao/callback")
+//    public String kakaoLogin(@RequestParam String code) throws JsonProcessingException{
+//        kakaoService.kakaoLogin(code, );
+//        return "redirect:/";
+//    }
+
+
+
 
 //        @GetMapping("/kakao/callback")
 //        public String kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {

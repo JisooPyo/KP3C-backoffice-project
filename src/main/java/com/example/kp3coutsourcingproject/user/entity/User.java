@@ -49,6 +49,9 @@ public class User {
 	@Column(nullable = false)
 	private String imageFile;
 
+	@Column
+	private Long kakaoId;
+
 	public User(String username, String nickname, String password, String introduction, String email, UserRoleEnum role, String image) {
 		this.username = username;
 		this.nickname = nickname;
@@ -58,6 +61,14 @@ public class User {
 		this.role = role;
 		this.imageFile = image;
 	}
+
+//	public User(String nickname, String encodedPassword, String email, UserRoleEnum role, Long kakaoId) {
+//		this.nickname = nickname;
+//		this.encodedPassword = encodedPassword;
+//		this.email = email;
+//		this.role = role;
+//		this.kakaoId = kakaoId;
+//	}
 
 	public void update(ProfileRequestDto requestDto) {
 		this.nickname = requestDto.getNickname();
