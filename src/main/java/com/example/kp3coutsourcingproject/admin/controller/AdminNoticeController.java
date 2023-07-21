@@ -38,33 +38,34 @@ public class AdminNoticeController {
     }
 
     /* 공지 1개 조회 */
-    @GetMapping("/{notice_id}")
+    @GetMapping("/{id}")
     public ResponseEntity<AdminNoticeResponseDto> getNotice(
-            @PathVariable Long noticeId,
+            @PathVariable Long id,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        AdminNoticeResponseDto result = adminNoticeService.getNotice(noticeId, userDetails.getUser());
+        AdminNoticeResponseDto result = adminNoticeService.getNotice(id, userDetails.getUser());
         return ResponseEntity.ok().body(result);
     }
 
     /* 공지 수정 */
-    @PutMapping("/{notice_id}")
+    @PutMapping("/{id}")
     public ResponseEntity<AdminNoticeResponseDto> updateNotice(
-            @PathVariable Long noticeId,
+            @PathVariable Long id,
             @RequestBody PostRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        AdminNoticeResponseDto result = adminNoticeService.updateNotice(noticeId, requestDto, userDetails.getUser());
+        AdminNoticeResponseDto result = adminNoticeService.updateNotice(id, requestDto, userDetails.getUser());
         return ResponseEntity.ok().body(result);
     }
 
     /* 공지 삭제 */
-    @DeleteMapping("/{notice_id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponseDto> deleteNotice(
-            @PathVariable Long noticeId,
+            @PathVariable Long id,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        adminNoticeService.deleteNotice(noticeId, userDetails.getUser());
+        adminNoticeService.deleteNotice(id, userDetails.getUser());
+
         return ResponseEntity.ok().body(
                 new ApiResponseDto("삭제가 완료되었습니다.", HttpStatus.OK.value())
         );
