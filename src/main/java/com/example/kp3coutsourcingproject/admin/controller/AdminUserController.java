@@ -7,6 +7,7 @@ import com.example.kp3coutsourcingproject.common.dto.ApiResponseDto;
 import com.example.kp3coutsourcingproject.common.security.UserDetailsImpl;
 import com.example.kp3coutsourcingproject.user.dto.ProfileRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,11 +23,16 @@ public class AdminUserController {
 
     /* 전체 회원 조회 */
     @GetMapping
-    public ResponseEntity<List<AdminUserResponseDto>> getUsers(
+    public Page<AdminUserResponseDto> getUsers(
+            @RequestParam("page") int page,
+            @RequestParam("size") int size,
+            @RequestParam("sortBy") String sortBy,
+            @RequestParam("isAsc") boolean isAsc,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        List<AdminUserResponseDto> results = adminUserService.getUsers(userDetails.getUser());
-        return ResponseEntity.ok().body(results);
+
+        return adminUserService.getUsers(userDetails.getUser(),
+                page - 1, size, sortBy, isAsc);
     }
 
     /* 회원 1명만 조회 */
