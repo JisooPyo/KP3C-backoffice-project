@@ -3,13 +3,10 @@ package com.example.kp3coutsourcingproject.comment.entity;
 import com.example.kp3coutsourcingproject.common.dto.Timestamped;
 import com.example.kp3coutsourcingproject.post.entity.Post;
 import com.example.kp3coutsourcingproject.user.entity.User;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.StringExpression;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 @Entity

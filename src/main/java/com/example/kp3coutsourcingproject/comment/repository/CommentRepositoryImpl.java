@@ -1,12 +1,7 @@
 package com.example.kp3coutsourcingproject.comment.repository;
 
 import com.example.kp3coutsourcingproject.comment.entity.Comment;
-import com.example.kp3coutsourcingproject.comment.entity.QComment;
 import com.example.kp3coutsourcingproject.post.entity.Post;
-import com.querydsl.core.types.Order;
-import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
