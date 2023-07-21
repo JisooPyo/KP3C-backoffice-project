@@ -20,7 +20,8 @@ public class FollowService {
 
     public List<FollowUserDto> getFollowers(String username) {
         User user = findUser(username);
-        return user.getFollowList()
+        List<Follow> followerList = followRepository.findAllByFollowee(user);
+        return followerList
                 .stream()
                 .map(Follow::getFollower)
                 .map(FollowUserDto::new)
@@ -29,7 +30,8 @@ public class FollowService {
 
     public List<FollowUserDto> getFollowing(String username) {
         User user = findUser(username);
-        return user.getFollowingList()
+        List<Follow> followingList = followRepository.findAllByFollower(user);
+        return followingList
                 .stream()
                 .map(Follow::getFollowee)
                 .map(FollowUserDto::new)
@@ -38,24 +40,28 @@ public class FollowService {
 
     public void follow(String username, User user) {
         User followee = findUser(username);
-        if(followee.getId().equals(user.getId())) {
+        if (followee.getId().equals(user.getId())) {
             throw new IllegalArgumentException("자기 자신을 팔로우할 수 없습니다.");
         }
-        if(followRepository.existsByFollowerAndFollowee(user, followee)) {
+        if (followRepository.existsByFollowerAndFollowee(user, followee)) {
             throw new IllegalArgumentException("이미 팔로우한 사용자입니다.");
         }
+        updateFollowCount(user, followee, +1);
+        userRepository.save(user);
         followRepository.save(new Follow(user, followee));
     }
 
     public void unfollow(String username, User user) {
         User followee = findUser(username);
-        if(followee.getId().equals(user.getId())) {
+        if (followee.getId().equals(user.getId())) {
             throw new IllegalArgumentException("자기 자신을 언팔로우할 수 없습니다.");
         }
         Follow existedFollow = followRepository.findByFollowerAndFollowee(user, followee).orElseThrow(() ->
                 new IllegalArgumentException("팔로우하지 않은 사용자입니다.")
         );
         followRepository.delete(existedFollow);
+        updateFollowCount(user, followee, -1);
+        userRepository.save(user);
     }
 
     public boolean isFollowing(String username, User user) {
@@ -67,5 +73,10 @@ public class FollowService {
         return userRepository.findByUsername(username).orElseThrow(() ->
                 new IllegalArgumentException("존재하지 않는 사용자입니다.")
         );
+    }
+
+    public void updateFollowCount(User follower, User followee, Integer value) {
+        follower.updateFollowingCount(value);
+        followee.updateFollowerCount(value);
     }
 }

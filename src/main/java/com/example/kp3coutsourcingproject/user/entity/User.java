@@ -5,15 +5,16 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.springframework.transaction.annotation.Transactional;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "users")
 @NoArgsConstructor
+@DynamicInsert
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,11 +41,12 @@ public class User {
 	@Enumerated(value = EnumType.STRING)
 	private UserRoleEnum role;
 
-	@OneToMany(mappedBy = "followee", cascade = CascadeType.ALL)
-	private List<Follow> followList = new ArrayList<>();
-
-	@OneToMany(mappedBy = "follower", cascade = CascadeType.ALL)
-	private List<Follow> followingList = new ArrayList<>();
+	@ColumnDefault("0")
+	@Column(name = "follower_count")
+	private Integer followerCount; // 팔로워 수
+	@ColumnDefault("0")
+	@Column(name = "following_count")
+	private Integer followingCount; // 팔로잉 수
 
 	@Column(nullable = false)
 	private String imageFile;
@@ -60,8 +62,18 @@ public class User {
 	}
 
 	public void update(ProfileRequestDto requestDto) {
+		this.username = requestDto.getUsername();
 		this.nickname = requestDto.getNickname();
 		this.introduction = requestDto.getIntroduction();
-		// this.imageUrl = requestDto.getImageUrl();
+		this.imageFile = requestDto.getImageUrl();
+	}
+
+	@Transactional
+	public void updateFollowerCount(Integer value) {
+		this.followerCount += value;
+	}
+	@Transactional
+	public void updateFollowingCount(Integer value) {
+		this.followingCount += value;
 	}
 }

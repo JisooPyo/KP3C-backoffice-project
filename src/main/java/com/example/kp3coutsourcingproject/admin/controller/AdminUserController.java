@@ -30,7 +30,6 @@ public class AdminUserController {
             @RequestParam("isAsc") boolean isAsc,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-
         return adminUserService.getUsers(userDetails.getUser(),
                 page - 1, size, sortBy, isAsc);
     }
