@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### querydsl로 만들어진 QEntity ###
+/src/main/generated/

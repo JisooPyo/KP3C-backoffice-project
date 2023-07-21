@@ -5,6 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class PostRequestDto {
+	private Long parentId;
 	@NotNull(message = "내용을 입력하세요.")
 	private String content;
 }

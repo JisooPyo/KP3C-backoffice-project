@@ -4,17 +4,18 @@ import com.example.kp3coutsourcingproject.common.dto.Timestamped;
 import com.example.kp3coutsourcingproject.post.dto.PostRequestDto;
 import com.example.kp3coutsourcingproject.user.entity.User;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
+@Builder
 @Entity
 @Setter
 @Getter
-@Table(name = "posts")
+@Table
 @NoArgsConstructor
+@AllArgsConstructor
 public class Post extends Timestamped {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,14 +25,26 @@ public class Post extends Timestamped {
 	@JoinColumn(name = "userId")
 	private User user;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "parentId")
+	private Post parent;
+
 	@Column(nullable = false)
 	private String content;
 
-	public Post(PostRequestDto requestDto) {
-		this.content = requestDto.getContent();
-	}
+	@Builder.Default
+	@OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)
+	private List<Post> children = new ArrayList<>();
 
 	public void update(PostRequestDto requestDto) {
 		this.content = requestDto.getContent();
+	}
+
+	public void updateParent(Post parent) {
+		this.parent = parent;
+	}
+
+	public Post(PostRequestDto requestDto) {
+		this.content=requestDto.getContent();
 	}
 }
