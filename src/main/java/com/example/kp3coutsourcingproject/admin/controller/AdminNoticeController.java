@@ -6,6 +6,7 @@ import com.example.kp3coutsourcingproject.common.dto.ApiResponseDto;
 import com.example.kp3coutsourcingproject.common.security.UserDetailsImpl;
 import com.example.kp3coutsourcingproject.post.dto.PostRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -32,9 +33,15 @@ public class AdminNoticeController {
 
     /* 전체 공지 조회 */
     @GetMapping
-    public ResponseEntity<List<AdminNoticeResponseDto>> getNotices(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        List<AdminNoticeResponseDto> results = adminNoticeService.getNotices(userDetails.getUser());
-        return ResponseEntity.ok().body(results);
+    public Page<AdminNoticeResponseDto> getNotices(
+            @RequestParam("page") int page,
+            @RequestParam("size") int size,
+            @RequestParam("sortBy") String sortBy,
+            @RequestParam("isAsc") boolean isAsc,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        return adminNoticeService.getNotices(userDetails.getUser(),
+                page - 1, size, sortBy, isAsc);
     }
 
     /* 공지 1개 조회 */

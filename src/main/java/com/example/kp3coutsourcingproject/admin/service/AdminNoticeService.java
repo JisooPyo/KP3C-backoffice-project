@@ -7,6 +7,10 @@ import com.example.kp3coutsourcingproject.post.dto.PostRequestDto;
 import com.example.kp3coutsourcingproject.user.entity.User;
 import com.example.kp3coutsourcingproject.user.entity.UserRoleEnum;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,14 +34,18 @@ public class AdminNoticeService {
         return new AdminNoticeResponseDto(notice);
     }
 
-    public List<AdminNoticeResponseDto> getNotices(User admin) {
+    public Page<AdminNoticeResponseDto> getNotices(User admin, int page, int size, String sortBy, boolean isAsc) {
         // 회원 권한 확인
         if (!isAdmin(admin)) {
             throw new IllegalArgumentException("관리자 권한이 있어야만 해당 요청을 실행할 수 있습니다.");
         }
+        // 페이징 기능
+        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, sortBy);
+        Pageable pageable = PageRequest.of(page, size, sort);
 
-        List<Notice> notices = adminNoticeRepository.findAll().stream().toList();
-        return notices.stream().map(AdminNoticeResponseDto::new).toList();
+        Page<Notice> noticeList = adminNoticeRepository.findAll(pageable);
+        return noticeList.map(AdminNoticeResponseDto::new);
     }
 
     public AdminNoticeResponseDto getNotice(Long noticeId, User admin) {
