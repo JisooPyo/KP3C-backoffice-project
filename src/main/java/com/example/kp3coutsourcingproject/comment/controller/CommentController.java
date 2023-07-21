@@ -19,7 +19,14 @@ import java.util.List;
 public class CommentController {
 	private final CommentService commentService;
 
-	// 선택한 게시글에 대한 모든 댓글 조회(대댓글까지)
+	// 선택한 게시글에 대한 모든 댓글 조회(대댓글까지) - 어디 쓰일지도 몰라..쓰이겠지
+	@GetMapping("/{id}/allComments")
+	public ResponseEntity<List<CommentResponseDto>> getAllCommentsByPostId(@PathVariable Long id) {
+		List<CommentResponseDto> results = commentService.getAllCommentsByPostId(id);
+		return ResponseEntity.ok().body(results);
+	}
+
+	// 선택한 게시글에 대한 모든 댓글 조회(대댓글X, 댓글만)
 	@GetMapping("/{id}/comments")
 	public ResponseEntity<List<CommentResponseDto>> getCommentsByPostId(@PathVariable Long id) {
 		List<CommentResponseDto> results = commentService.getCommentsByPostId(id);

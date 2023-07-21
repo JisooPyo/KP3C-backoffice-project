@@ -9,4 +9,6 @@ public interface PostCustomRepository {
 
 	List<Post> getUserFeed(Long userId);
 
+	List<Post> findAllPosts();
+
 }

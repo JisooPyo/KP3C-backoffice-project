@@ -12,7 +12,7 @@ import static com.example.kp3coutsourcingproject.user.entity.QFollow.follow;
 
 @Repository
 @RequiredArgsConstructor
-public class PostRepositoryImpl implements PostCustomRepository{
+public class PostRepositoryImpl implements PostCustomRepository {
 	private final JPAQueryFactory queryFactory;
 
 	// 홈피드 가져오기
@@ -54,5 +54,14 @@ public class PostRepositoryImpl implements PostCustomRepository{
 
 		userPosts.sort((p1, p2) -> p2.getId().compareTo(p1.getId()));
 		return userPosts;
+	}
+
+	@Override
+	public List<Post> findAllPosts() {
+		return queryFactory.selectFrom(post)
+				.leftJoin(post.parent)
+				.fetchJoin()
+				.orderBy(post.parent.id.asc().nullsFirst(), post.createdAt.asc())
+				.fetch();
 	}
 }

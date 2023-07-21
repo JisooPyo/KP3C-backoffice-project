@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 @Setter
 @Getter
-@Table(name = "posts")
+@Table
 @NoArgsConstructor
 @AllArgsConstructor
 public class Post extends Timestamped {
@@ -26,13 +26,22 @@ public class Post extends Timestamped {
 	@JoinColumn(name = "userId")
 	private User user;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "parentId")
+	private Post parent;
+
 	@Column(nullable = false)
 	private String content;
 
-	@OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
-	private List<Comment> comments;
+	@Builder.Default
+	@OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)
+	private List<Post> children = new ArrayList<>();
 
 	public void update(PostRequestDto requestDto) {
 		this.content = requestDto.getContent();
+	}
+
+	public void updateParent(Post parent) {
+		this.parent = parent;
 	}
 }

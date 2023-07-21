@@ -23,12 +23,18 @@ public class CommentService {
 	private final UserRepository userRepository;
 
 	// 선택한 게시글에 대한 모든 댓글 조회(대댓글까지)
-	public List<CommentResponseDto> getCommentsByPostId(Long id) {
+	public List<CommentResponseDto> getAllCommentsByPostId(Long id) {
 		Post post = findPost(id);
 		List<Comment> commentList = commentRepository.findAllByPost(post);
 
 		return convertNestedStructure(commentList);
 
+	}
+
+	// 선택한 게시글에 대한 댓글 조회
+	public List<CommentResponseDto> getCommentsByPostId(Long id) {
+
+		return null;
 	}
 
 	// 댓글 작성
