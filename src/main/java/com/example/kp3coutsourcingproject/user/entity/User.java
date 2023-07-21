@@ -78,4 +78,17 @@ public class User {
 		this.kakaoId = kakaoId;
 		return this;
 	}
+
+	public User(String nickname, String password, String email, UserRoleEnum role, Long kakaoId) {
+		this.nickname = nickname;
+		this.password = password;
+		this.email = email;
+		this.role = role;
+		this.kakaoId = kakaoId;
+	}
+
+	public User updateKakaoId(Long kakaoId) {
+		this.kakaoId = kakaoId;
+		return this;
+	}
 }
