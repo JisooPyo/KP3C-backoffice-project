@@ -25,6 +25,7 @@ public class PostRepositoryImpl implements PostCustomRepository {
 				.innerJoin(follow)
 				.on(post.user.id.eq(follow.followee.id))
 				.where(follow.follower.id.eq(userId))
+				.where(post.parent.id.isNull())
 				.fetch();
 
 		// 사용자 본인의 게시물을 가져오는 메인 쿼리
@@ -32,6 +33,7 @@ public class PostRepositoryImpl implements PostCustomRepository {
 				.select(post)
 				.from(post)
 				.where(post.user.id.eq(userId))
+				.where(post.parent.id.isNull())
 				.fetch();
 
 		// 두 리스트를 합치고, id를 기준으로 내림차순으로 정렬하여 최종 홈 피드를 얻기.
@@ -50,6 +52,7 @@ public class PostRepositoryImpl implements PostCustomRepository {
 				.select(post)
 				.from(post)
 				.where(post.user.id.eq(userId))
+				.where(post.parent.id.isNull())
 				.fetch();
 
 		userPosts.sort((p1, p2) -> p2.getId().compareTo(p1.getId()));

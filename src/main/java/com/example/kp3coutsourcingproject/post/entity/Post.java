@@ -43,4 +43,8 @@ public class Post extends Timestamped {
 	public void updateParent(Post parent) {
 		this.parent = parent;
 	}
+
+	public Post(PostRequestDto requestDto) {
+		this.content=requestDto.getContent();
+	}
 }
