@@ -7,7 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-
+/*주소창에 아래 url 입력
+https://accounts.google.com/o/oauth2/auth?client_id=883622715290-hlnj8g6snt2q8rhpeu114akt8p92l996.apps.googleusercontent.com&redirect_uri=http://localhost:8080/login/oauth2/code/google&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile*/
 @Service
 public class GoogleLoginService {
 

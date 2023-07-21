@@ -1,9 +1,13 @@
 package com.example.kp3coutsourcingproject.oauth2.google.controller;
 
 import com.example.kp3coutsourcingproject.oauth2.google.service.GoogleLoginService;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+import javax.print.attribute.standard.PresentationDirection;
+
+@Controller
 @RequestMapping(value = "/login/oauth2", produces = "application/json")
 public class GoogleLoginController {
 
@@ -13,8 +17,9 @@ public class GoogleLoginController {
         this.loginService = loginService;
     }
 
-    @GetMapping("/code/{registrationId}")
+    @GetMapping(value = "/code/{registrationId}", produces = "application/json")
     public void googleLogin(@RequestParam String code, @PathVariable String registrationId) {
         loginService.socialLogin(code, registrationId);
     }
+
 }
