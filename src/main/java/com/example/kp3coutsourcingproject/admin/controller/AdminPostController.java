@@ -7,6 +7,7 @@ import com.example.kp3coutsourcingproject.post.dto.PostRequestDto;
 import com.example.kp3coutsourcingproject.post.dto.PostResponseDto;
 import com.example.kp3coutsourcingproject.redis.service.RedisPostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -33,9 +34,15 @@ public class AdminPostController {
 
     /* 전체 게시글 조회 */
     @GetMapping
-    public ResponseEntity<List<PostResponseDto>> getPosts(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        List<PostResponseDto> results = adminPostService.getPosts(userDetails.getUser());
-        return ResponseEntity.ok().body(results);
+    public Page<PostResponseDto> getPosts(
+            @RequestParam("page") int page,
+            @RequestParam("size") int size,
+            @RequestParam("sortBy") String sortBy,
+            @RequestParam("isAsc") boolean isAsc,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        return adminPostService.getPosts(userDetails.getUser(),
+                page - 1, size, sortBy, isAsc);
     }
 
     /* 게시글 1개 조회 */
