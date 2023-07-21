@@ -32,8 +32,7 @@ public class PostViewController {
     @GetMapping("/post")
     public String showPostPage(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         // 프로필 사진, 닉네임
-        //UserProfileResponseDto dto = userService.getUserProfile(userDetails.getUser().getId());
-        UserProfileResponseDto dto = userService.getUserProfile(1L);
+        UserProfileResponseDto dto = userService.getUserProfile(userDetails.getUser().getId());
         model.addAttribute("user", dto);
         return "post";
     }
@@ -49,8 +48,7 @@ public class PostViewController {
         }
         // AwsS3Service의 uploadFile 메소드를 호출하여 S3에 저장
         List<String> uploadUrl = awsS3Service.uploadFile(multipartFileList);
-        //PostResponseDto postResponseDto = postViewService.createPost(requestDto, userDetails.getUser(), uploadUrl);
-        PostResponseDto postResponseDto = postViewService.createPost(requestDto, uploadUrl);
+        PostResponseDto postResponseDto = postViewService.createPost(requestDto, userDetails.getUser(), uploadUrl);
 
         redirectAttributes.addAttribute("id", postResponseDto.getId());
 
@@ -60,11 +58,9 @@ public class PostViewController {
     // 선택 포스트 조회
     // http://localhost:8080/kp3c-view/post/1
     @GetMapping("/post/{id}")
-   // public String getPostById(@PathVariable Long id, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        public String getPostById(@PathVariable Long id, Model model) {
+    public String getPostById(@PathVariable Long id, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         // 프로필 사진, 닉네임
-        //UserProfileResponseDto profileDto = userService.getUserProfile(userDetails.getUser().getId());
-        UserProfileResponseDto profileDto = userService.getUserProfile(1L);
+        UserProfileResponseDto profileDto = userService.getUserProfile(userDetails.getUser().getId());
         model.addAttribute("user", profileDto);
         // 포스트 조회
         PostResponseDto postDto = postViewService.getPostById(id);

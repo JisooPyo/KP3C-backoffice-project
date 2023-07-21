@@ -12,10 +12,8 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -34,10 +32,8 @@ public class PostViewService {
 	}
 
 	// 포스트 작성
-	/*public PostResponseDto createPost(PostRequestDto requestDto, User user, List<String> imgPaths) {
-		User targetUser = findUser(user.getId());*/
-		public PostResponseDto createPost(PostRequestDto requestDto, List<String> imgPaths) {
-			User targetUser = findUser(1);
+	public PostResponseDto createPost(PostRequestDto requestDto, User user, List<String> imgPaths) {
+		User targetUser = findUser(user.getId());
 		Post post = new Post(requestDto);
 		post.setUser(targetUser);
 		postRepository.save(post);
