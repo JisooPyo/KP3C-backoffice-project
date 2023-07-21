@@ -25,8 +25,8 @@ public class JwtUtil {
 	public static final String AUTHORIZATION_HEADER = "Authorization"; // Header KEY 값
 	public static final String AUTHORIZATION_KEY = "auth"; // 사용자 권한 값의 KEY
 	public static final String BEARER_PREFIX = "Bearer "; // Token 식별자
-	private final long ACCESS_TOKEN_TIME = 1000L * 60 * 30; // 30분
-	private final long REFRESH_TOKEN_TIME = 1000L * 60 * 60 * 24 * 3; // 3일
+	public static final long ACCESS_TOKEN_TIME = 1000L * 60 * 30; // 30분
+	public static final long REFRESH_TOKEN_TIME = 1000L * 60 * 60 * 24 * 3; // 3일
 
 	@Value("${jwt.secret.key}") // application.properties에 명시되어 있는 secretKey
 	private String secretKey;
@@ -43,20 +43,20 @@ public class JwtUtil {
 		key = Keys.hmacShaKeyFor(bytes);
 	}
 
-	public TokenResponse issueToken(String email, UserRoleEnum role) {
+	public TokenDto issueToken(String email, UserRoleEnum role) {
 		String accessToken = createAccessToken(email, role);
 		String refreshToken = createRefreshToken(email);
 		redisUtils.put(email, refreshToken, REFRESH_TOKEN_TIME);
-		return new TokenResponse(accessToken, refreshToken);
+		return new TokenDto(accessToken, refreshToken);
 	}
 
-	public TokenResponse reissueToken(String email, UserRoleEnum role) {
+	public TokenDto reissueToken(String email, UserRoleEnum role) {
 		String refreshToken = redisUtils.get(email, String.class);
 		if(Objects.isNull(refreshToken)) {
 			throw new CustomException(ErrorCode.EXPIRED_REFRESH_TOKEN);
 		}
 		String accessToken = createAccessToken(email, role);
-		return new TokenResponse(accessToken, null);
+		return new TokenDto(accessToken, null);
 	}
 
 	private String createAccessToken(String email, UserRoleEnum role) {
@@ -97,6 +97,9 @@ public class JwtUtil {
 	public boolean validateToken(String token) {
 		try {
 			Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+			if(redisUtils.isExists(token)) { // blacklist 에 있는지 확인
+				return false;
+			}
 			return true;
 		} catch(ExpiredJwtException e) {
 			log.error(ErrorCode.EXPIRED_ACCESS_TOKEN.getMessage());

@@ -1,8 +1,9 @@
 package com.example.kp3coutsourcingproject.user.controller;
 
+import com.example.kp3coutsourcingproject.common.dto.ApiResponseDto;
 import com.example.kp3coutsourcingproject.common.file.FileStore;
 import com.example.kp3coutsourcingproject.common.jwt.JwtUtil;
-import com.example.kp3coutsourcingproject.common.jwt.TokenResponse;
+import com.example.kp3coutsourcingproject.common.jwt.TokenDto;
 import com.example.kp3coutsourcingproject.common.security.UserDetailsImpl;
 import com.example.kp3coutsourcingproject.kakao.service.KakaoService;
 import com.example.kp3coutsourcingproject.user.dto.SignupRequestDto;
@@ -18,6 +19,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,19 +45,19 @@ public class UserController {
 
     @GetMapping("/reissue")
     @ResponseBody
-    public TokenResponse reissueToken(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public TokenDto reissueToken(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
         return jwtUtil.reissueToken(user.getEmail(), user.getRole());
     }
 
     @GetMapping("/kakao/callback")
     @ResponseBody
-    public TokenResponse kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
-        TokenResponse tokenResponse = kakaoService.kakaoLogin(code);
-        Cookie cookie = new Cookie(JwtUtil.AUTHORIZATION_HEADER, tokenResponse.getAccessToken());
+    public TokenDto kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+        TokenDto tokenDto = kakaoService.kakaoLogin(code);
+        Cookie cookie = new Cookie(JwtUtil.AUTHORIZATION_HEADER, tokenDto.getAccessToken());
         cookie.setPath("/");
         response.addCookie(cookie);
-        return tokenResponse;
+        return tokenDto;
     }
 
     // 회원가입 프론트엔드와 연결
@@ -103,5 +106,12 @@ public class UserController {
     @GetMapping("/images/{filename}")
     public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
         return new UrlResource("file:" + fileStore.getFullPath(filename));
+    }
+
+    @ResponseBody
+    @DeleteMapping("/logout")
+    public ResponseEntity<ApiResponseDto> logout(@RequestBody TokenDto tokenDto) {
+        userService.logout(tokenDto.getAccessToken());
+        return ResponseEntity.ok().body(new ApiResponseDto("로그아웃 성공", HttpStatus.OK.value()));
     }
 }

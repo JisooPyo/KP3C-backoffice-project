@@ -1,13 +1,18 @@
 package com.example.kp3coutsourcingproject.user.service;
 
+import com.example.kp3coutsourcingproject.common.exception.CustomException;
+import com.example.kp3coutsourcingproject.common.exception.ErrorCode;
 import com.example.kp3coutsourcingproject.common.file.FileStore;
 import com.example.kp3coutsourcingproject.common.file.UploadFile;
+import com.example.kp3coutsourcingproject.common.jwt.JwtUtil;
+import com.example.kp3coutsourcingproject.common.redis.RedisUtils;
 import com.example.kp3coutsourcingproject.user.dto.SignupRequestDto;
 import com.example.kp3coutsourcingproject.user.dto.UserProfileRequestDto;
 import com.example.kp3coutsourcingproject.user.dto.UserProfileResponseDto;
 import com.example.kp3coutsourcingproject.user.entity.User;
 import com.example.kp3coutsourcingproject.user.entity.UserRoleEnum;
 import com.example.kp3coutsourcingproject.user.repository.UserRepository;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -25,6 +30,8 @@ public class UserService {
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final FileStore fileStore;
+	private final JwtUtil jwtUtil;
+	private final RedisUtils redisUtils;
 
 	// ADMIN_TOKEN
 	private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
@@ -68,6 +75,19 @@ public class UserService {
 		// 사용자 등록
 		User user = new User(username, nickname, password, introduce, email, role, imageFile);
 		userRepository.save(user);
+	}
+
+	@Transactional
+	public void logout(String accessToken) {
+		if(!jwtUtil.validateToken(accessToken)) {
+			throw new CustomException(ErrorCode.INVALID_TOKEN);
+		}
+		Claims userInfo = jwtUtil.getUserInfoFromToken(accessToken);
+		String userEmail = userInfo.getSubject();
+
+		redisUtils.delete(userEmail); // refresh token 삭제
+
+		redisUtils.put(accessToken, "accessToken", JwtUtil.ACCESS_TOKEN_TIME); // blacklist 에 등록
 	}
 
 	// 프로필 조회
