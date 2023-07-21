@@ -15,80 +15,67 @@ import java.util.List;
 @Table(name = "users")
 @NoArgsConstructor
 public class User {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column(unique = true)
-	private String username;
+    @Column(unique = true)
+    private String username;
 
-	// nickname이 null로 들어오면 username과 같은 값을 넣도록 하고 싶음.
-	@Column(nullable = false)
-	private String nickname;
+    // nickname이 null로 들어오면 username과 같은 값을 넣도록 하고 싶음.
+    @Column(nullable = false)
+    private String nickname;
 
-	@Column(nullable = false)
-	private String password;
+    @Column(nullable = false)
+    private String password;
 
-	// nullable = false 설정을 안해주면 어떻게 되지? 소개 안 쓰고 싶은 사람도 있는데!
-	private String introduction;
+    // nullable = false 설정을 안해주면 어떻게 되지? 소개 안 쓰고 싶은 사람도 있는데!
+    private String introduction;
 
-	@Column(nullable = false)
-	private String email;
+    @Column(nullable = false)
+    private String email;
 
-	@Column(nullable = false)
-	@Enumerated(value = EnumType.STRING)
-	private UserRoleEnum role;
-	
-	private Long kakaoId;
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private UserRoleEnum role;
 
-	@OneToMany(mappedBy = "followee", cascade = CascadeType.ALL)
-	private List<Follow> followList = new ArrayList<>();
+    private Long kakaoId;
 
-	@OneToMany(mappedBy = "follower", cascade = CascadeType.ALL)
-	private List<Follow> followingList = new ArrayList<>();
+    @OneToMany(mappedBy = "followee", cascade = CascadeType.ALL)
+    private List<Follow> followList = new ArrayList<>();
 
-	@Column(nullable = false)
-	private String imageFile;
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL)
+    private List<Follow> followingList = new ArrayList<>();
 
-	public User(String username, String nickname, String password, String introduction, String email, UserRoleEnum role, String image) {
-		this.username = username;
-		this.nickname = nickname;
-		this.password = password;
-		this.introduction = introduction;
-		this.email = email;
-		this.role = role;
-		this.imageFile = image;
-	}
+    @Column(nullable = false)
+    private String imageFile;
 
-	public void update(ProfileRequestDto requestDto) {
-		this.nickname = requestDto.getNickname();
-		this.introduction = requestDto.getIntroduction();
-		// this.imageUrl = requestDto.getImageUrl();
-	}
+    public User(String username, String nickname, String password, String introduction, String email, UserRoleEnum role, String image) {
+        this.username = username;
+        this.nickname = nickname;
+        this.password = password;
+        this.introduction = introduction;
+        this.email = email;
+        this.role = role;
+        this.imageFile = image;
+    }
 
-	public User(String nickname, String password, String email, UserRoleEnum role, Long kakaoId) {
-		this.nickname = nickname;
-		this.password = password;
-		this.email = email;
-		this.role = role;
-		this.kakaoId = kakaoId;
-	}
+    public void update(ProfileRequestDto requestDto) {
+        this.nickname = requestDto.getNickname();
+        this.introduction = requestDto.getIntroduction();
+        // this.imageUrl = requestDto.getImageUrl();
+    }
 
-	public User updateKakaoId(Long kakaoId) {
-		this.kakaoId = kakaoId;
-		return this;
-	}
+    public User(String nickname, String password, String email, UserRoleEnum role, Long kakaoId) {
+        this.nickname = nickname;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.kakaoId = kakaoId;
+    }
 
-	public User(String nickname, String password, String email, UserRoleEnum role, Long kakaoId) {
-		this.nickname = nickname;
-		this.password = password;
-		this.email = email;
-		this.role = role;
-		this.kakaoId = kakaoId;
-	}
-
-	public User updateKakaoId(Long kakaoId) {
-		this.kakaoId = kakaoId;
-		return this;
-	}
+    public User updateKakaoId(Long kakaoId) {
+        this.kakaoId = kakaoId;
+        return this;
+    }
 }

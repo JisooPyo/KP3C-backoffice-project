@@ -45,7 +45,7 @@ public class JwtUtil {
 
 	public TokenResponse issueToken(String email, UserRoleEnum role) {
 		String accessToken = createAccessToken(email, role);
-		String refreshToken = createRefreshToken();
+		String refreshToken = createRefreshToken(email);
 		redisUtils.put(email, refreshToken, REFRESH_TOKEN_TIME);
 		return new TokenResponse(accessToken, refreshToken);
 	}
@@ -72,11 +72,12 @@ public class JwtUtil {
 				.compact();
 	}
 
-	private String createRefreshToken() {
+	private String createRefreshToken(String email) {
 		Date now = new Date();
 		Date expireDate = new Date(now.getTime() + REFRESH_TOKEN_TIME);
 
 		return Jwts.builder()
+				.setSubject(email)
 				.setIssuedAt(now)
 				.setExpiration(expireDate)
 				.signWith(key, signatureAlgorithm)
