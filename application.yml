@@ -11,6 +11,6 @@ oauth2:
   kakao:
     client-id: 7455eac9bc76a0c055254eea8bc6bb38
     client-secret: DHS35DyFxEIepnFAJjzjUsXD6OX7Mc96
-    redirect-uri: http://localhost:8080/kp3c/user/kakao/callback
+    redirect-uri: http://localhost:8080/login/oauth2/kakaocode/kakao
     token-uri: https://kauth.kakao.com/oauth/token
     resource-uri: https://kapi.kakao.com/v2/user/me

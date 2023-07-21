@@ -23,6 +23,7 @@ public class GoogleLoginService {
         String accessToken = getAccessToken(code, registrationId);
         JsonNode userResourceNode = getUserResource(accessToken, registrationId);
         System.out.println("userResourceNode = " + userResourceNode);
+        System.out.println("registrationId = " + registrationId);
 
         String id = userResourceNode.get("id").asText();
         String email = userResourceNode.get("email").asText();
