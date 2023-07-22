@@ -3,7 +3,6 @@ package com.example.kp3coutsourcingproject.common.security;
 import com.example.kp3coutsourcingproject.common.jwt.JwtAuthenticationFilter;
 import com.example.kp3coutsourcingproject.common.jwt.JwtAuthorizationFilter;
 import com.example.kp3coutsourcingproject.common.jwt.JwtUtil;
-import com.example.kp3coutsourcingproject.user.entity.UserRoleEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -61,8 +60,10 @@ public class WebSecurityConfig {
 		http.authorizeHttpRequests((authorizeHttpRequests) ->
 				authorizeHttpRequests
 						.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
-						.requestMatchers("/kp3c/user/signup").permitAll() // '/api/user/'로 시작하는 요청 모두 접근 허가
-						.requestMatchers("/kp3c/user/login").permitAll() // '/api/user/'로 시작하는 요청 모두 접근 허가
+						.requestMatchers("/kp3c/user/signup").permitAll()
+						.requestMatchers("/kp3c/user/login").permitAll()
+						.requestMatchers("/kp3c/user/kakao/**").permitAll()
+						.requestMatchers("/kp3c/user/reissue").permitAll()
 						.requestMatchers("/kp3c/manage/**").hasRole("ADMIN") // 관리자="ADMIN"만 /manage 도메인 접근 가능
 						.requestMatchers("/redis/**").permitAll() // redis용 임시 허가
 						// sns는 보통 로그인 안하면 아무것도 못하니까 일단은 요거만 해놓고

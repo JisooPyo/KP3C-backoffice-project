@@ -16,64 +16,78 @@ import org.springframework.transaction.annotation.Transactional;
 @NoArgsConstructor
 @DynamicInsert
 public class User {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column(nullable = false, unique = true)
-	private String username;
+    @Column(unique = true)
+    private String username;
 
-	// nickname이 null로 들어오면 username과 같은 값을 넣도록 하고 싶음.
-	@Column(nullable = false)
-	private String nickname;
+    @Column(nullable = false)
+    private String nickname;
 
-	@Column(nullable = false)
-	private String password;
+    @Column(nullable = false)
+    private String password;
 
-	// nullable = false 설정을 안해주면 어떻게 되지? 소개 안 쓰고 싶은 사람도 있는데!
-	@Column(nullable = false)
-	private String introduction;
+    private String introduction;
 
-	@Column(nullable = false)
-	private String email;
+    @Column(nullable = false)
+    private String email;
 
-	@Column(nullable = false)
-	@Enumerated(value = EnumType.STRING)
-	private UserRoleEnum role;
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private UserRoleEnum role;
 
-	@ColumnDefault("0")
-	@Column(name = "follower_count")
-	private Integer followerCount; // 팔로워 수
-	@ColumnDefault("0")
-	@Column(name = "following_count")
-	private Integer followingCount; // 팔로잉 수
+    private Long kakaoId;
 
-	@Column(nullable = false)
-	private String imageFile;
+    @ColumnDefault("0")
+    @Column(name = "follower_count")
+    private Integer followerCount; // 팔로워 수
 
-	public User(String username, String nickname, String password, String introduction, String email, UserRoleEnum role, String image) {
-		this.username = username;
-		this.nickname = nickname;
-		this.password = password;
-		this.introduction = introduction;
-		this.email = email;
-		this.role = role;
-		this.imageFile = image;
-	}
+    @ColumnDefault("0")
+    @Column(name = "following_count")
+    private Integer followingCount; // 팔로잉 수
 
-	public void update(ProfileRequestDto requestDto) {
-		this.username = requestDto.getUsername();
-		this.nickname = requestDto.getNickname();
-		this.introduction = requestDto.getIntroduction();
-		this.imageFile = requestDto.getImageUrl();
-	}
+    @Column(nullable = false)
+    private String imageFile;
 
-	@Transactional
-	public void updateFollowerCount(Integer value) {
-		this.followerCount += value;
-	}
-	@Transactional
-	public void updateFollowingCount(Integer value) {
-		this.followingCount += value;
-	}
+    public User(String username, String nickname, String password, String introduction, String email, UserRoleEnum role, String image) {
+        this.username = username;
+        this.nickname = nickname;
+        this.password = password;
+        this.introduction = introduction;
+        this.email = email;
+        this.role = role;
+        this.imageFile = image;
+    }
+
+    public User(String nickname, String password, String email, UserRoleEnum role, Long kakaoId) {
+        this.nickname = nickname;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.kakaoId = kakaoId;
+    }
+
+    public void update(ProfileRequestDto requestDto) {
+        this.username = requestDto.getUsername();
+        this.nickname = requestDto.getNickname();
+        this.introduction = requestDto.getIntroduction();
+        this.imageFile = requestDto.getImageUrl();
+    }
+
+    public User updateKakaoId(Long kakaoId) {
+        this.kakaoId = kakaoId;
+        return this;
+    }
+
+    @Transactional
+    public void updateFollowerCount(Integer value) {
+        this.followerCount += value;
+    }
+
+    @Transactional
+    public void updateFollowingCount(Integer value) {
+        this.followingCount += value;
+    }
 }

@@ -1,5 +1,8 @@
 package com.example.kp3coutsourcingproject.common.jwt;
 
+import com.example.kp3coutsourcingproject.common.exception.CustomException;
+import com.example.kp3coutsourcingproject.common.exception.ErrorCode;
+import com.example.kp3coutsourcingproject.common.redis.RedisUtils;
 import com.example.kp3coutsourcingproject.user.entity.UserRoleEnum;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -13,20 +16,26 @@ import org.springframework.util.StringUtils;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
+import java.util.Objects;
 
 @Slf4j(topic = "Jwt 관련 로그")
 @Component
 public class JwtUtil {
-
+	private final RedisUtils redisUtils;
 	public static final String AUTHORIZATION_HEADER = "Authorization"; // Header KEY 값
 	public static final String AUTHORIZATION_KEY = "auth"; // 사용자 권한 값의 KEY
 	public static final String BEARER_PREFIX = "Bearer "; // Token 식별자
-	private final long TOKEN_TIME = 60 * 60 * 1000L; // 60분
+	public static final long ACCESS_TOKEN_TIME = 1000L * 60 * 30; // 30분
+	public static final long REFRESH_TOKEN_TIME = 1000L * 60 * 60 * 24 * 3; // 3일
 
 	@Value("${jwt.secret.key}") // application.properties에 명시되어 있는 secretKey
 	private String secretKey;
 	private Key key; // Decode된 Secret Key를 담는 객체
 	private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256; // 알고리즘
+
+	public JwtUtil(RedisUtils redisUtils) {
+		this.redisUtils = redisUtils;
+	}
 
 	@PostConstruct
 	public void init() {
@@ -34,18 +43,45 @@ public class JwtUtil {
 		key = Keys.hmacShaKeyFor(bytes);
 	}
 
-	// JWT 생성
-	public String createToken(String username, UserRoleEnum role) {
-		Date date = new Date();
+	public TokenDto issueToken(String email, UserRoleEnum role) {
+		String accessToken = createAccessToken(email, role);
+		String refreshToken = createRefreshToken(email);
+		redisUtils.put(email, refreshToken, REFRESH_TOKEN_TIME);
+		return new TokenDto(accessToken, refreshToken);
+	}
 
-		return BEARER_PREFIX +
-				Jwts.builder()
-						.setSubject(username) // 사용자 식별자값(ID)
-						.claim(AUTHORIZATION_KEY, role) // 사용자 권한
-						.setExpiration(new Date(date.getTime() + TOKEN_TIME)) // 만료 시간
-						.setIssuedAt(date) // 발급일
-						.signWith(key, signatureAlgorithm) // 암호화 알고리즘
-						.compact();
+	public TokenDto reissueToken(String email, UserRoleEnum role) {
+		String refreshToken = redisUtils.get(email, String.class);
+		if(Objects.isNull(refreshToken)) {
+			throw new CustomException(ErrorCode.EXPIRED_REFRESH_TOKEN);
+		}
+		String accessToken = createAccessToken(email, role);
+		return new TokenDto(accessToken, null);
+	}
+
+	private String createAccessToken(String email, UserRoleEnum role) {
+		Date now = new Date();
+		Date expireDate = new Date(now.getTime() + ACCESS_TOKEN_TIME);
+
+		return Jwts.builder()
+				.setSubject(email)
+				.claim(AUTHORIZATION_KEY, role)
+				.setIssuedAt(now)
+				.setExpiration(expireDate)
+				.signWith(key, signatureAlgorithm)
+				.compact();
+	}
+
+	private String createRefreshToken(String email) {
+		Date now = new Date();
+		Date expireDate = new Date(now.getTime() + REFRESH_TOKEN_TIME);
+
+		return Jwts.builder()
+				.setSubject(email)
+				.setIssuedAt(now)
+				.setExpiration(expireDate)
+				.signWith(key, signatureAlgorithm)
+				.compact();
 	}
 
 	// header 에서 JWT 가져오기
@@ -61,17 +97,17 @@ public class JwtUtil {
 	public boolean validateToken(String token) {
 		try {
 			Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+			if(redisUtils.isExists(token)) { // blacklist 에 있는지 확인
+				return false;
+			}
 			return true;
-		} catch (SecurityException | MalformedJwtException | SignatureException e) {
-			log.error("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
-		} catch (ExpiredJwtException e) {
-			log.error("Expired JWT token, 만료된 JWT token 입니다.");
-		} catch (UnsupportedJwtException e) {
-			log.error("Unsupported JWT token, 지원되지 않는 JWT 토큰 입니다.");
-		} catch (IllegalArgumentException e) {
-			log.error("JWT claims is empty, 잘못된 JWT 토큰 입니다.");
+		} catch(ExpiredJwtException e) {
+			log.error(ErrorCode.EXPIRED_ACCESS_TOKEN.getMessage());
+			throw new CustomException(ErrorCode.EXPIRED_ACCESS_TOKEN);
+		} catch(JwtException e) {
+			log.error(ErrorCode.INVALID_TOKEN.getMessage());
+			throw new CustomException(ErrorCode.INVALID_TOKEN);
 		}
-		return false;
 	}
 
 	// 토큰에서 사용자 정보 가져오기

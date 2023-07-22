@@ -3,7 +3,7 @@ package com.example.kp3coutsourcingproject.common.jwt;
 import com.example.kp3coutsourcingproject.common.dto.ApiResponseDto;
 import com.example.kp3coutsourcingproject.common.security.UserDetailsImpl;
 import com.example.kp3coutsourcingproject.user.dto.LoginRequestDto;
-import com.example.kp3coutsourcingproject.user.entity.UserRoleEnum;
+import com.example.kp3coutsourcingproject.user.entity.User;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
@@ -26,7 +26,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		this.jwtUtil = jwtUtil;
 		setFilterProcessesUrl("/kp3c/user/login");
 	}
-
 
 	//로그인 시도 시 동작하는 메서드
 	@Override
@@ -54,17 +53,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	// JWT 생성 및 client에 응답
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
-		String userId = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
-		UserRoleEnum role = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getRole();
+		User user = ((UserDetailsImpl) authResult.getPrincipal()).getUser();
+		TokenDto token = jwtUtil.issueToken(user.getEmail(), user.getRole());
 
-		//사용자 ID/권한으로 JWT 생성
-		String token = jwtUtil.createToken(userId, role);
-		response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token); //헤더에 Authorztion = Bearer {JWT} 추가
+		String tokenWithPrefix = JwtUtil.BEARER_PREFIX + token.getAccessToken();
+		response.addHeader(JwtUtil.AUTHORIZATION_HEADER, tokenWithPrefix);
 
-		//client에 응답하기 "message" = "로그인 성공"/ "status" = "200"
-		ApiResponseDto apiResponseDto = new ApiResponseDto("로그인 성공", response.getStatus());
-		String jsonResponseBody = new ObjectMapper().configure(JsonGenerator.Feature.ESCAPE_NON_ASCII, true).writeValueAsString(apiResponseDto);//한글깨짐문제 방지
-		response.setContentType("application/json"); //contenttype : json방식으로 응답 전달
+		String jsonResponseBody = new ObjectMapper().writeValueAsString(token);
+		response.setContentType("application/json");
 		response.getWriter().write(jsonResponseBody);
 		response.getWriter().flush();
 		response.getWriter().close();
@@ -83,5 +79,4 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		response.getWriter().flush();
 		response.getWriter().close();
 	}
-
 }
