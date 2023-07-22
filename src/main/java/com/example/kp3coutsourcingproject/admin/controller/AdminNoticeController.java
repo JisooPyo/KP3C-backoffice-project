@@ -72,7 +72,6 @@ public class AdminNoticeController {
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         adminNoticeService.deleteNotice(id, userDetails.getUser());
-
         return ResponseEntity.ok().body(
                 new ApiResponseDto("삭제가 완료되었습니다.", HttpStatus.OK.value())
         );
