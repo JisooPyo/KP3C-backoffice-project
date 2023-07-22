@@ -40,6 +40,7 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
+    @Column(columnDefinition = "char(1)")
     private Boolean enabled; // 액세스 가능
 
     private Long kakaoId;
