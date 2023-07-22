@@ -31,12 +31,12 @@ public class FollowServiceIntegrationTest {
     User userA, userB, userC;
 
     private void userSetup() {
-        userA = new User("userA", "userA", "Abc012#!", "hi", "userA@email.com", UserRoleEnum.USER);
-        userB = new User("userB", "userB", "Abc012#!", "hi", "userB@email.com", UserRoleEnum.USER);
-        userC = new User("userC", "userC", "Abc012#!", "hi", "userC@email.com", UserRoleEnum.USER);
-        userRepository.save(userA);
-        userRepository.save(userB);
-        userRepository.save(userC);
+        // userA = new User("userA", "userA", "Abc012#!", "hi", "userA@email.com", UserRoleEnum.USER);
+        // userB = new User("userB", "userB", "Abc012#!", "hi", "userB@email.com", UserRoleEnum.USER);
+        // userC = new User("userC", "userC", "Abc012#!", "hi", "userC@email.com", UserRoleEnum.USER);
+        // userRepository.save(userA);
+        // userRepository.save(userB);
+        // userRepository.save(userC);
     }
 
     @Test

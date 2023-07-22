@@ -4,6 +4,7 @@ import com.example.kp3coutsourcingproject.common.dto.ApiResponseDto;
 import com.example.kp3coutsourcingproject.common.security.UserDetailsImpl;
 import com.example.kp3coutsourcingproject.post.dto.PostRequestDto;
 import com.example.kp3coutsourcingproject.post.dto.PostResponseDto;
+import com.example.kp3coutsourcingproject.post.entity.Post;
 import com.example.kp3coutsourcingproject.post.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,22 +21,40 @@ import java.util.List;
 public class PostController {
 	private final PostService postService;
 
-	// 포스트 전체 조회
+	// 모든 글 계층형으로 조회(답글까지) - 어디에서 쓰이겠지 뭐..
+	@GetMapping("/allPosts")
+	public ResponseEntity<List<PostResponseDto>> getAllPosts(){
+		List<PostResponseDto> results = postService.getAllPosts();
+		return ResponseEntity.ok().body(results);
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////
+
+	// 홈피드(유저 작성 글 + 유저가 팔로잉한 글)
 	// http://localhost:8080/kp3c/posts
-	@GetMapping("/posts")
-	public ResponseEntity<List<PostResponseDto>> getPosts() {
-		List<PostResponseDto> results = postService.getPosts();
+	@GetMapping("/homeFeed")
+	public ResponseEntity<List<PostResponseDto>> getHomeFeed(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		List<PostResponseDto> results = postService.getHomeFeed(userDetails.getUser());
 
 		return ResponseEntity.ok().body(results);
 	}
 
-	// 선택 포스트 조회
+	// 자기피드(유저 작성 글만)
 	// http://localhost:8080/kp3c/post/1
-	@GetMapping("/post/{id}")
-	public ResponseEntity<PostResponseDto> getPostById(@PathVariable Long id) {
-		PostResponseDto result = postService.getPostById(id);
-		return ResponseEntity.ok().body(result);
+	@GetMapping("/myFeed")
+	public ResponseEntity<List<PostResponseDto>> getMyFeed(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		List<PostResponseDto> results = postService.getMyFeed(userDetails.getUser());
+		return ResponseEntity.ok().body(results);
 	}
+
+	// 선택한 게시글에 대한 모든 답글 조회(답글의 답글 x, 답글만!)
+	@GetMapping("/post/{id}")
+	public ResponseEntity<List<PostResponseDto>> getChildPosts(@PathVariable Long id){
+		List<PostResponseDto> results = postService.getChildPosts(id);
+		return ResponseEntity.ok().body(results);
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////
 
 	// 포스트 작성
 	// http://localhost:8080/kp3c/post
