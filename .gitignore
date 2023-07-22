@@ -39,3 +39,7 @@ out/
 ## properties ##
 application-db.properties
 application-API-KEY.properties
+
+### querydsl로 만들어진 QEntity ###
+/src/main/generated/
+

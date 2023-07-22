@@ -5,15 +5,16 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.springframework.transaction.annotation.Transactional;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "users")
 @NoArgsConstructor
+@DynamicInsert
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,14 +23,12 @@ public class User {
     @Column(unique = true)
     private String username;
 
-    // nickname이 null로 들어오면 username과 같은 값을 넣도록 하고 싶음.
     @Column(nullable = false)
     private String nickname;
 
     @Column(nullable = false)
     private String password;
 
-    // nullable = false 설정을 안해주면 어떻게 되지? 소개 안 쓰고 싶은 사람도 있는데!
     private String introduction;
 
     @Column(nullable = false)
@@ -41,11 +40,13 @@ public class User {
 
     private Long kakaoId;
 
-    @OneToMany(mappedBy = "followee", cascade = CascadeType.ALL)
-    private List<Follow> followList = new ArrayList<>();
+    @ColumnDefault("0")
+    @Column(name = "follower_count")
+    private Integer followerCount; // 팔로워 수
 
-    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL)
-    private List<Follow> followingList = new ArrayList<>();
+    @ColumnDefault("0")
+    @Column(name = "following_count")
+    private Integer followingCount; // 팔로잉 수
 
     @Column(nullable = false)
     private String imageFile;
@@ -60,12 +61,6 @@ public class User {
         this.imageFile = image;
     }
 
-    public void update(ProfileRequestDto requestDto) {
-        this.nickname = requestDto.getNickname();
-        this.introduction = requestDto.getIntroduction();
-        // this.imageUrl = requestDto.getImageUrl();
-    }
-
     public User(String nickname, String password, String email, UserRoleEnum role, Long kakaoId) {
         this.nickname = nickname;
         this.password = password;
@@ -74,8 +69,25 @@ public class User {
         this.kakaoId = kakaoId;
     }
 
+    public void update(ProfileRequestDto requestDto) {
+        this.username = requestDto.getUsername();
+        this.nickname = requestDto.getNickname();
+        this.introduction = requestDto.getIntroduction();
+        this.imageFile = requestDto.getImageUrl();
+    }
+
     public User updateKakaoId(Long kakaoId) {
         this.kakaoId = kakaoId;
         return this;
+    }
+
+    @Transactional
+    public void updateFollowerCount(Integer value) {
+        this.followerCount += value;
+    }
+
+    @Transactional
+    public void updateFollowingCount(Integer value) {
+        this.followingCount += value;
     }
 }

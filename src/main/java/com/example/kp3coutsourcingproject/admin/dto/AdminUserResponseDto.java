@@ -14,6 +14,8 @@ public class AdminUserResponseDto {
     private String username;
     private String nickname;
     private String introduction;
+    private int followingCount;
+    private int followerCount;
     private String imageUrl;
     private UserRoleEnum role;
 
@@ -22,6 +24,8 @@ public class AdminUserResponseDto {
         this.username = user.getUsername();
         this.nickname = user.getNickname();
         this.introduction = user.getIntroduction();
+        this.followingCount = user.getFollowingCount();
+        this.followerCount = user.getFollowerCount();
         this.imageUrl = user.getImageFile();
         this.role = user.getRole();
     }
