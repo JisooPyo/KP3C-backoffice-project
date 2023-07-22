@@ -10,6 +10,7 @@ import com.example.kp3coutsourcingproject.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +24,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/kp3c-view")
 @RequiredArgsConstructor
+@PreAuthorize("principal.enabled")
 public class PostViewController {
     private final PostViewService postViewService;
     private final UserService userService;

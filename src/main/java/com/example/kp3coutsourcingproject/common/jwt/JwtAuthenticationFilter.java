@@ -1,10 +1,8 @@
 package com.example.kp3coutsourcingproject.common.jwt;
 
-import com.example.kp3coutsourcingproject.common.dto.ApiResponseDto;
 import com.example.kp3coutsourcingproject.common.security.UserDetailsImpl;
 import com.example.kp3coutsourcingproject.user.dto.LoginRequestDto;
 import com.example.kp3coutsourcingproject.user.entity.User;
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -59,7 +57,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
 		User user = ((UserDetailsImpl) authResult.getPrincipal()).getUser();
-		TokenDto token = jwtUtil.issueToken(user.getEmail(), user.getRole());
+		TokenDto token = jwtUtil.issueToken(user.getEmail(), user.getRole()); // 토큰 발급
 
 		String tokenWithPrefix = JwtUtil.BEARER_PREFIX + token.getAccessToken();
 		response.addHeader(JwtUtil.AUTHORIZATION_HEADER, tokenWithPrefix);

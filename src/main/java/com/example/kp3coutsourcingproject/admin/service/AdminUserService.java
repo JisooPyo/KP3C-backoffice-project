@@ -2,6 +2,7 @@ package com.example.kp3coutsourcingproject.admin.service;
 
 import com.example.kp3coutsourcingproject.admin.dto.AdminUserResponseDto;
 import com.example.kp3coutsourcingproject.admin.dto.AdminUserRoleRequestDto;
+import com.example.kp3coutsourcingproject.common.redis.RedisUtils;
 import com.example.kp3coutsourcingproject.post.entity.Post;
 import com.example.kp3coutsourcingproject.post.repository.PostRepository;
 import com.example.kp3coutsourcingproject.user.dto.ProfileRequestDto;
@@ -28,6 +29,8 @@ public class AdminUserService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final PasswordEncoder passwordEncoder;
+
+    private final RedisUtils redisUtils;
 
     public Page<AdminUserResponseDto> getUsers(User admin, int page, int size, String sortBy, boolean isAsc) {
         // 회원 권한 확인
@@ -111,7 +114,6 @@ public class AdminUserService {
         if (!isAdmin(admin)) {
             throw new IllegalArgumentException("관리자 권한이 있어야만 해당 요청을 실행할 수 있습니다.");
         }
-
         User findUser = findUser(userId);
         if (isAdmin(findUser)) {
             throw new IllegalArgumentException("관리자는 삭제할 수 없습니다.");
@@ -122,6 +124,8 @@ public class AdminUserService {
             postRepository.delete(post);
         }
         userRepository.delete(findUser);
+
+        redisUtils.delete(findUser.getEmail()); // refresh token 삭제
     }
 
     public void blockUser(Long userId, User admin) {
@@ -132,6 +136,8 @@ public class AdminUserService {
 
         User findUser = findUser(userId);
         findUser.setEnabled(false); // enable 불가능으로 전환
+
+        redisUtils.delete(findUser.getEmail()); // refresh token 삭제
     }
 
     private boolean isAdmin(User admin) {
