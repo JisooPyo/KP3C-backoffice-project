@@ -1,6 +1,7 @@
 package com.example.kp3coutsourcingproject.post.entity;
 
 import com.example.kp3coutsourcingproject.common.dto.Timestamped;
+import com.example.kp3coutsourcingproject.common.file.Post_Image;
 import com.example.kp3coutsourcingproject.post.dto.PostRequestDto;
 import com.example.kp3coutsourcingproject.user.entity.User;
 import jakarta.persistence.*;
@@ -31,6 +32,10 @@ public class Post extends Timestamped {
 
 	@Column(nullable = false)
 	private String content;
+
+
+	@OneToMany(mappedBy = "post",  cascade = CascadeType.ALL, orphanRemoval = true)// 게시글이 삭제되면 그 게시글에 있는 댓글들 모두 삭제가 되도록
+	private List<Post_Image> ImagetList;
 
 	@Builder.Default
 	@OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)

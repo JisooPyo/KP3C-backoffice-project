@@ -78,8 +78,10 @@ public class UserController {
     // 프로필 조회
     @GetMapping("/profile")
     public String profile(@AuthenticationPrincipal UserDetailsImpl userDetails, Model model) {
-        //Long userId = userDetails.getUser().getId(); // userDetails - 로그인 시 정보 얻어서 사용
-        UserProfileResponseDto dto = userService.getUserProfile(1L); // 뷰에 보여줄 데이터
+
+        Long userId = userDetails.getUser().getId(); // userDetails - 로그인 시 정보 얻어서 사용
+        UserProfileResponseDto dto = userService.getUserProfile(userId); // 뷰에 보여줄 데이터
+
         model.addAttribute("user", dto); // user 라는 이름에 db에 저장된 데이터 뿌려주기
 
         return "profile";
@@ -87,8 +89,10 @@ public class UserController {
     // 프로필 수정
     @PostMapping("/profile")
     public String modifyProfile(@AuthenticationPrincipal UserDetailsImpl userDetails, @ModelAttribute UserProfileRequestDto requestDto) throws IOException {
-        //Long userId = userDetails.getUser().getId();
-        UserProfileResponseDto dto = userService.updateUserProfile(1L, requestDto);
+
+        Long userId = userDetails.getUser().getId();
+        userService.updateUserProfile(userId, requestDto);
+
         return "redirect:/kp3c/user/profile"; // 수정 후 조회 화면에서 데이터 보여주기
     }
 
