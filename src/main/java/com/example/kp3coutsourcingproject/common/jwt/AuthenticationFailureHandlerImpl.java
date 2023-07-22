@@ -1,0 +1,28 @@
+package com.example.kp3coutsourcingproject.common.jwt;
+
+import com.example.kp3coutsourcingproject.common.dto.ApiResponseDto;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+
+import java.io.IOException;
+
+public class AuthenticationFailureHandlerImpl implements AuthenticationFailureHandler {
+    @Override
+    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
+
+        //client에 응답하기 "message" = "로그인 실패"/ "status" = "400"
+        ApiResponseDto apiResponseDto = new ApiResponseDto("로그인 실패", response.getStatus());
+        String jsonResponseBody = new ObjectMapper().configure(JsonGenerator.Feature.ESCAPE_NON_ASCII, true).writeValueAsString(apiResponseDto);
+        response.setContentType("application/json");
+        response.getWriter().write(jsonResponseBody);
+        response.getWriter().flush();
+        response.getWriter().close();
+    }
+}

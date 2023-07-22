@@ -1,5 +1,6 @@
 package com.example.kp3coutsourcingproject.common.security;
 
+import com.example.kp3coutsourcingproject.common.jwt.AuthenticationFailureHandlerImpl;
 import com.example.kp3coutsourcingproject.common.jwt.JwtAuthenticationFilter;
 import com.example.kp3coutsourcingproject.common.jwt.JwtAuthorizationFilter;
 import com.example.kp3coutsourcingproject.common.jwt.JwtUtil;
@@ -14,6 +15,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -35,7 +37,9 @@ public class WebSecurityConfig {
 	// Jwt로 로그인 인증하는 필터 Bean 등록
 	@Bean
 	public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
-		JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil);
+		JwtAuthenticationFilter filter = new JwtAuthenticationFilter(
+																	jwtUtil,
+																	authenticationFailureHandler());
 		filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
 		return filter;
 	}
@@ -45,6 +49,12 @@ public class WebSecurityConfig {
 	public JwtAuthorizationFilter jwtAuthorizationFilter() {
 		return new JwtAuthorizationFilter(jwtUtil, userDetailsService);
 	}
+
+	@Bean
+	public AuthenticationFailureHandler authenticationFailureHandler(){
+		return new AuthenticationFailureHandlerImpl();
+	}
+
 
 	// 지금까지는 filter를 만들기만 한 것. SecurityFilterChain에 끼워줘야 한다.
 	@Bean
