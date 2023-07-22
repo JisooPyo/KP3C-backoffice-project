@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static com.example.kp3coutsourcingproject.common.util.AccessUtils.getSafe;
+
 public class UserDetailsImpl implements UserDetails {
 
 	private final User user;
@@ -44,23 +46,31 @@ public class UserDetailsImpl implements UserDetails {
 		return authorities;
 	}
 
+	// 계정이 만료되지 않았는지
+	// true == 만료되지 않음
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;
 	}
 
+	// 계정이 잠겨있지 않은지
+	// true == 잠겨있지 않음
 	@Override
 	public boolean isAccountNonLocked() {
-		return true;
+		return getSafe(getUser().getEnabled(), true);
 	}
 
+	// 계정 패스워드가 만료되지 않았는지
+	// true == 패스워드가 만료되지 않음
 	@Override
 	public boolean isCredentialsNonExpired() {
 		return true;
 	}
 
+	// 사용가능한 계정인지
+	// true == 사용가능한 계정
 	@Override
 	public boolean isEnabled() {
-		return true;
+		return getSafe(getUser().getEnabled(), true);
 	}
 }

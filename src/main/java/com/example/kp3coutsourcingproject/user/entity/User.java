@@ -9,6 +9,8 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.example.kp3coutsourcingproject.common.util.AccessUtils.getSafe;
+
 @Entity
 @Getter
 @Setter
@@ -38,12 +40,14 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
+    @Column(columnDefinition = "char(1)")
+    private Boolean enabled; // 액세스 가능
+
     private Long kakaoId;
 
     @ColumnDefault("0")
     @Column(name = "follower_count")
     private Integer followerCount; // 팔로워 수
-
     @ColumnDefault("0")
     @Column(name = "following_count")
     private Integer followingCount; // 팔로잉 수
@@ -58,6 +62,7 @@ public class User {
         this.introduction = introduction;
         this.email = email;
         this.role = role;
+        this.enabled = getSafe(this.enabled, true);
         this.imageFile = image;
     }
 
@@ -81,11 +86,12 @@ public class User {
         return this;
     }
 
+
+
     @Transactional
     public void updateFollowerCount(Integer value) {
         this.followerCount += value;
     }
-
     @Transactional
     public void updateFollowingCount(Integer value) {
         this.followingCount += value;
