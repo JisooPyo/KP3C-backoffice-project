@@ -13,6 +13,7 @@ import com.example.kp3coutsourcingproject.user.entity.User;
 import com.example.kp3coutsourcingproject.user.entity.UserRoleEnum;
 import com.example.kp3coutsourcingproject.user.repository.UserRepository;
 import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -78,8 +79,8 @@ public class UserService {
 	}
 
 	@Transactional
-	public void logout(String accessToken) {
-		if(!jwtUtil.validateToken(accessToken)) {
+	public void logout(HttpServletResponse res, String accessToken) throws IOException {
+		if(!jwtUtil.validateToken(res, accessToken)) {
 			throw new CustomException(ErrorCode.INVALID_TOKEN);
 		}
 		Claims userInfo = jwtUtil.getUserInfoFromToken(accessToken);
@@ -87,7 +88,7 @@ public class UserService {
 
 		redisUtils.delete(userEmail); // refresh token 삭제
 
-		redisUtils.put(accessToken, "accessToken", JwtUtil.ACCESS_TOKEN_TIME); // blacklist 에 등록
+		redisUtils.put(accessToken, "logout", JwtUtil.ACCESS_TOKEN_TIME); // blacklist 에 등록
 	}
 
 	// 프로필 조회

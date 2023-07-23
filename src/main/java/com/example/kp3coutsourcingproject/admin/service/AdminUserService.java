@@ -2,6 +2,7 @@ package com.example.kp3coutsourcingproject.admin.service;
 
 import com.example.kp3coutsourcingproject.admin.dto.AdminUserResponseDto;
 import com.example.kp3coutsourcingproject.admin.dto.AdminUserRoleRequestDto;
+import com.example.kp3coutsourcingproject.common.jwt.JwtUtil;
 import com.example.kp3coutsourcingproject.common.redis.RedisUtils;
 import com.example.kp3coutsourcingproject.post.entity.Post;
 import com.example.kp3coutsourcingproject.post.repository.PostRepository;
@@ -123,9 +124,13 @@ public class AdminUserService {
         for(Post post : postList) {
             postRepository.delete(post);
         }
-        userRepository.delete(findUser);
 
-        redisUtils.delete(findUser.getEmail()); // refresh token 삭제
+        String accessToken = redisUtils.get(findUser.getEmail(), "access_token", String.class);
+        redisUtils.put(accessToken, "delete forced", JwtUtil.ACCESS_TOKEN_TIME); // blacklist 에 등록
+
+        redisUtils.delete(findUser.getEmail(), "refresh_token"); // refresh token 삭제
+        redisUtils.delete(findUser.getEmail(), "access_token"); // access token 삭제
+        userRepository.delete(findUser); // 회원 정보 삭제
     }
 
     public void blockUser(Long userId, User admin) {
@@ -137,7 +142,11 @@ public class AdminUserService {
         User findUser = findUser(userId);
         findUser.setEnabled(false); // enable 불가능으로 전환
 
-        redisUtils.delete(findUser.getEmail()); // refresh token 삭제
+        String accessToken = redisUtils.get(findUser.getEmail(), "access_token", String.class);
+        redisUtils.put(accessToken, "block", JwtUtil.ACCESS_TOKEN_TIME); // blacklist 에 등록
+
+        redisUtils.delete(findUser.getEmail(), "refresh_token"); // refresh token 삭제
+        redisUtils.delete(findUser.getEmail(), "access_token"); // access token 삭제
     }
 
     private boolean isAdmin(User admin) {

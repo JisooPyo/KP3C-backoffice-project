@@ -1,18 +1,23 @@
 package com.example.kp3coutsourcingproject.common.jwt;
 
+import com.example.kp3coutsourcingproject.common.dto.ApiResponseDto;
 import com.example.kp3coutsourcingproject.common.exception.CustomException;
 import com.example.kp3coutsourcingproject.common.exception.ErrorCode;
 import com.example.kp3coutsourcingproject.common.redis.RedisUtils;
 import com.example.kp3coutsourcingproject.user.entity.UserRoleEnum;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.io.IOException;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
@@ -45,17 +50,21 @@ public class JwtUtil {
 
 	public TokenDto issueToken(String email, UserRoleEnum role) {
 		String accessToken = createAccessToken(email, role);
+		redisUtils.put(email, "access_token", accessToken, ACCESS_TOKEN_TIME);
 		String refreshToken = createRefreshToken(email);
-		redisUtils.put(email, refreshToken, REFRESH_TOKEN_TIME);
+		redisUtils.put(email, "refresh_token", refreshToken, REFRESH_TOKEN_TIME);
+		// redisUtils.put(email, refreshToken, REFRESH_TOKEN_TIME);
 		return new TokenDto(accessToken, refreshToken);
 	}
 
 	public TokenDto reissueToken(String email, UserRoleEnum role) {
-		String refreshToken = redisUtils.get(email, String.class);
+		String refreshToken = redisUtils.get(email, "refresh_token", String.class); // 가져오기
+		redisUtils.put(email, "refresh_token", refreshToken, REFRESH_TOKEN_TIME); // 재발급 받은 refresh token 저장
 		if(Objects.isNull(refreshToken)) {
 			throw new CustomException(ErrorCode.EXPIRED_REFRESH_TOKEN);
 		}
-		String accessToken = createAccessToken(email, role);
+		String accessToken = createAccessToken(email, role); // access token 재발급
+		redisUtils.put(email, "access_token", accessToken, ACCESS_TOKEN_TIME); // 재발급 받은 access token 저장
 		return new TokenDto(accessToken, null);
 	}
 
@@ -94,13 +103,18 @@ public class JwtUtil {
 	}
 
 	// 토큰 검증
-	public boolean validateToken(String token) {
+	public boolean validateToken(HttpServletResponse res, String token) throws IOException {
 		try {
 			Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
 			if(redisUtils.isExists(token)) { // blacklist 에 있는지 확인
+				ApiResponseDto apiResponseDto = new ApiResponseDto("token error", res.getStatus());
+
+				String jsonResponseBody = new ObjectMapper().configure(JsonGenerator.Feature.ESCAPE_NON_ASCII, true).writeValueAsString(apiResponseDto);
+				res.setContentType("application/json");
+				res.getWriter().write(jsonResponseBody);
+				res.getWriter().flush();
 				return false;
 			}
-			return true;
 		} catch(ExpiredJwtException e) {
 			log.error(ErrorCode.EXPIRED_ACCESS_TOKEN.getMessage());
 			throw new CustomException(ErrorCode.EXPIRED_ACCESS_TOKEN);
@@ -108,6 +122,7 @@ public class JwtUtil {
 			log.error(ErrorCode.INVALID_TOKEN.getMessage());
 			throw new CustomException(ErrorCode.INVALID_TOKEN);
 		}
+		return true;
 	}
 
 	// 토큰에서 사용자 정보 가져오기
