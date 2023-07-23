@@ -107,12 +107,7 @@ public class JwtUtil {
 		try {
 			Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
 			if(redisUtils.isExists(token)) { // blacklist 에 있는지 확인
-				ApiResponseDto apiResponseDto = new ApiResponseDto("token error", res.getStatus());
-
-				String jsonResponseBody = new ObjectMapper().configure(JsonGenerator.Feature.ESCAPE_NON_ASCII, true).writeValueAsString(apiResponseDto);
-				res.setContentType("application/json");
-				res.getWriter().write(jsonResponseBody);
-				res.getWriter().flush();
+				sendErrorMessage(res);
 				return false;
 			}
 		} catch(ExpiredJwtException e) {
@@ -123,6 +118,15 @@ public class JwtUtil {
 			throw new CustomException(ErrorCode.INVALID_TOKEN);
 		}
 		return true;
+	}
+
+	private static void sendErrorMessage(HttpServletResponse res) throws IOException {
+		ApiResponseDto apiResponseDto = new ApiResponseDto("token error", res.getStatus());
+
+		String jsonResponseBody = new ObjectMapper().configure(JsonGenerator.Feature.ESCAPE_NON_ASCII, true).writeValueAsString(apiResponseDto);
+		res.setContentType("application/json");
+		res.getWriter().write(jsonResponseBody);
+		res.getWriter().flush();
 	}
 
 	// 토큰에서 사용자 정보 가져오기
