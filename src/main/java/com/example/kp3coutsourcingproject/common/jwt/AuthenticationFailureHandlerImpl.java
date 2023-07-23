@@ -34,7 +34,8 @@ public class AuthenticationFailureHandlerImpl implements AuthenticationFailureHa
         }
 
         // client에 응답하기 "message" = "loginFailMsg".value / "status" = "400"
-        ApiResponseDto apiResponseDto = new ApiResponseDto(request.getAttribute("loginFailMsg").toString(), response.getStatus());
+        String loginFailMsg = request.getAttribute("loginFailMsg").toString();
+        ApiResponseDto apiResponseDto = new ApiResponseDto(loginFailMsg, response.getStatus());
         String jsonResponseBody = new ObjectMapper().configure(JsonGenerator.Feature.ESCAPE_NON_ASCII, true).writeValueAsString(apiResponseDto);
         response.setContentType("application/json");
         response.getWriter().write(jsonResponseBody);

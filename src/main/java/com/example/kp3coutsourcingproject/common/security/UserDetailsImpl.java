@@ -57,7 +57,7 @@ public class UserDetailsImpl implements UserDetails {
 	// true == 잠겨있지 않음
 	@Override
 	public boolean isAccountNonLocked() {
-		return getSafe(getUser().getEnabled(), true);
+		return true;
 	}
 
 	// 계정 패스워드가 만료되지 않았는지
