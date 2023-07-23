@@ -24,7 +24,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/kp3c-view")
 @RequiredArgsConstructor
-@PreAuthorize("principal.enabled")
 public class PostViewController {
     private final PostViewService postViewService;
     private final UserService userService;

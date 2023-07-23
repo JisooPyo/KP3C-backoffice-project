@@ -18,7 +18,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/kp3c")
 @RequiredArgsConstructor
-@PreAuthorize("principal.enabled")
 public class PostController {
 	private final PostService postService;
 
