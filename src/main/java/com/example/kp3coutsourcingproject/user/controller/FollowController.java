@@ -17,6 +17,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/kp3c")
+@PreAuthorize("principal.enabled")
 public class FollowController {
 
     private final FollowService followService;
