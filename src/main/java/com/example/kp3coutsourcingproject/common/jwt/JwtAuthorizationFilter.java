@@ -40,7 +40,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
 		//토큰이 유효한지 검증
 		if (StringUtils.hasText(tokenValue)) {
-			if (!jwtUtil.validateToken(tokenValue)) {
+			if (!jwtUtil.validateToken(res, tokenValue)) {
 				log.error("Token Error");
 				return;
 			}

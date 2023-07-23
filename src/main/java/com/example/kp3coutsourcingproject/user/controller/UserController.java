@@ -114,8 +114,8 @@ public class UserController {
 
     @ResponseBody
     @DeleteMapping("/logout")
-    public ResponseEntity<ApiResponseDto> logout(@RequestBody TokenDto tokenDto) {
-        userService.logout(tokenDto.getAccessToken());
+    public ResponseEntity<ApiResponseDto> logout(HttpServletResponse res, @RequestBody TokenDto tokenDto) throws IOException {
+        userService.logout(res, tokenDto.getAccessToken());
         return ResponseEntity.ok().body(new ApiResponseDto("로그아웃 성공", HttpStatus.OK.value()));
     }
 }

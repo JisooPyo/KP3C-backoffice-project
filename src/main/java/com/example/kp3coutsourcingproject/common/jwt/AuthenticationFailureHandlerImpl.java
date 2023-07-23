@@ -17,7 +17,6 @@ import java.io.IOException;
 public class AuthenticationFailureHandlerImpl implements AuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-
         // throw exception 비교
         if (exception instanceof AuthenticationServiceException) {
             request.setAttribute("loginFailMsg", "존재하지 않는 사용자입니다.");
@@ -36,6 +35,7 @@ public class AuthenticationFailureHandlerImpl implements AuthenticationFailureHa
         // client에 응답하기 "message" = "loginFailMsg".value / "status" = "400"
         String loginFailMsg = request.getAttribute("loginFailMsg").toString();
         ApiResponseDto apiResponseDto = new ApiResponseDto(loginFailMsg, response.getStatus());
+
         String jsonResponseBody = new ObjectMapper().configure(JsonGenerator.Feature.ESCAPE_NON_ASCII, true).writeValueAsString(apiResponseDto);
         response.setContentType("application/json");
         response.getWriter().write(jsonResponseBody);
