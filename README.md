@@ -1,5 +1,5 @@
 # Needle은 SNS하지 마라~
-> 💭 [KPT 회고](링크)
+> 💭 [KPT 회고](https://argente29.tistory.com/116)
 
 ## 목차
 #### 1. [프로젝트 개요](#프로젝트-개요)
