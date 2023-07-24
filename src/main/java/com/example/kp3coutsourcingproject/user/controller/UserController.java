@@ -21,6 +21,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -85,6 +86,7 @@ public class UserController {
     }
 
     // 프로필 조회
+    @PreAuthorize("principal.enabled")
     @GetMapping("/profile")
     public String profile(@AuthenticationPrincipal UserDetailsImpl userDetails, Model model) {
 
@@ -96,6 +98,7 @@ public class UserController {
         return "profile";
     }
     // 프로필 수정
+    @PreAuthorize("principal.enabled")
     @PostMapping("/profile")
     public String modifyProfile(@AuthenticationPrincipal UserDetailsImpl userDetails, @ModelAttribute UserProfileRequestDto requestDto) throws IOException {
 
@@ -107,15 +110,17 @@ public class UserController {
 
     // 저장된 경로에서 이미지 다운로드 하여 보여주기
     @ResponseBody
+    @PreAuthorize("principal.enabled")
     @GetMapping("/images/{filename}")
     public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
         return new UrlResource("file:" + fileStore.getFullPath(filename));
     }
 
     @ResponseBody
+    @PreAuthorize("principal.enabled")
     @DeleteMapping("/logout")
-    public ResponseEntity<ApiResponseDto> logout(@RequestBody TokenDto tokenDto) {
-        userService.logout(tokenDto.getAccessToken());
+    public ResponseEntity<ApiResponseDto> logout(HttpServletResponse res, @RequestBody TokenDto tokenDto) throws IOException {
+        userService.logout(res, tokenDto.getAccessToken());
         return ResponseEntity.ok().body(new ApiResponseDto("로그아웃 성공", HttpStatus.OK.value()));
     }
 }

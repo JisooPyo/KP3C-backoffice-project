@@ -13,8 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/kp3c/manage/user")
 @RequiredArgsConstructor
@@ -92,10 +90,13 @@ public class AdminUserController {
         );
     }
 
-    /* 회원 차단 */
-    @PutMapping("/{id}/block")
-    public ResponseEntity<ApiResponseDto> blockUser(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        adminUserService.blockUser(id, userDetails.getUser());
+    /* 회원 차단 (수동?) */
+    @PutMapping("/block")
+    public ResponseEntity<ApiResponseDto> blockUser(
+            @RequestParam("id") Long userId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        adminUserService.blockUser(userId, userDetails.getUser());
         return ResponseEntity.ok().body(
                 new ApiResponseDto("회원 차단 완료", HttpStatus.OK.value())
         );

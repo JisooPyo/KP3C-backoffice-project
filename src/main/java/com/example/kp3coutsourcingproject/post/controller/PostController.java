@@ -4,12 +4,12 @@ import com.example.kp3coutsourcingproject.common.dto.ApiResponseDto;
 import com.example.kp3coutsourcingproject.common.security.UserDetailsImpl;
 import com.example.kp3coutsourcingproject.post.dto.PostRequestDto;
 import com.example.kp3coutsourcingproject.post.dto.PostResponseDto;
-import com.example.kp3coutsourcingproject.post.entity.Post;
 import com.example.kp3coutsourcingproject.post.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/kp3c")
 @RequiredArgsConstructor
+@PreAuthorize("principal.enabled")
 public class PostController {
 	private final PostService postService;
 
@@ -86,6 +87,4 @@ public class PostController {
 				new ApiResponseDto("게시글 삭제 성공", HttpStatus.OK.value())
 		);
 	}
-
-
 }

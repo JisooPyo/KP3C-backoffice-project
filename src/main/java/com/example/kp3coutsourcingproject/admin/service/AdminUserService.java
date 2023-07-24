@@ -2,6 +2,8 @@ package com.example.kp3coutsourcingproject.admin.service;
 
 import com.example.kp3coutsourcingproject.admin.dto.AdminUserResponseDto;
 import com.example.kp3coutsourcingproject.admin.dto.AdminUserRoleRequestDto;
+import com.example.kp3coutsourcingproject.common.jwt.JwtUtil;
+import com.example.kp3coutsourcingproject.common.redis.RedisUtils;
 import com.example.kp3coutsourcingproject.post.entity.Post;
 import com.example.kp3coutsourcingproject.post.repository.PostRepository;
 import com.example.kp3coutsourcingproject.user.dto.ProfileRequestDto;
@@ -28,6 +30,8 @@ public class AdminUserService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final PasswordEncoder passwordEncoder;
+
+    private final RedisUtils redisUtils;
 
     public Page<AdminUserResponseDto> getUsers(User admin, int page, int size, String sortBy, boolean isAsc) {
         // 회원 권한 확인
@@ -111,7 +115,6 @@ public class AdminUserService {
         if (!isAdmin(admin)) {
             throw new IllegalArgumentException("관리자 권한이 있어야만 해당 요청을 실행할 수 있습니다.");
         }
-
         User findUser = findUser(userId);
         if (isAdmin(findUser)) {
             throw new IllegalArgumentException("관리자는 삭제할 수 없습니다.");
@@ -121,10 +124,29 @@ public class AdminUserService {
         for(Post post : postList) {
             postRepository.delete(post);
         }
-        userRepository.delete(findUser);
+
+        String accessToken = redisUtils.get(findUser.getEmail(), "access_token", String.class);
+        redisUtils.put(accessToken, "delete forced", JwtUtil.ACCESS_TOKEN_TIME); // blacklist 에 등록
+
+        redisUtils.delete(findUser.getEmail(), "refresh_token"); // refresh token 삭제
+        redisUtils.delete(findUser.getEmail(), "access_token"); // access token 삭제
+        userRepository.delete(findUser); // 회원 정보 삭제
     }
 
     public void blockUser(Long userId, User admin) {
+        // 회원 권한 확인
+        if (!isAdmin(admin)) {
+            throw new IllegalArgumentException("관리자 권한이 있어야만 해당 요청을 실행할 수 있습니다.");
+        }
+
+        User findUser = findUser(userId);
+        findUser.setEnabled(false); // enable 불가능으로 전환
+
+        String accessToken = redisUtils.get(findUser.getEmail(), "access_token", String.class);
+        redisUtils.put(accessToken, "block", JwtUtil.ACCESS_TOKEN_TIME); // blacklist 에 등록
+
+        redisUtils.delete(findUser.getEmail(), "refresh_token"); // refresh token 삭제
+        redisUtils.delete(findUser.getEmail(), "access_token"); // access token 삭제
     }
 
     private boolean isAdmin(User admin) {
