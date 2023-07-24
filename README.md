@@ -1,4 +1,4 @@
-# KP3C-outsourcing-project
+# KP3C-BackOffice-project
 > 💭 [KPT 회고](링크)
 
 ## 목차
@@ -15,8 +15,10 @@
 ---
 
 ## 프로젝트 개요
-### 프로젝트명
-> KP3C Outsourcing Project
+### Needle은 SNS하지 마라~
+KP3C BackOffice Project
+
+스레드와 트위터를 참고하여 SNS 만들기!
 
 ### 프로젝트 요구 사항
 <details>
