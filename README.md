@@ -1,10 +1,11 @@
 # Needle은 SNS하지 마라~
 
-스레드와 트위터를 참고하여 SNS 사이트를 만들어보고 백오피스까지 구현해보는 프로젝트
+📱 스레드와 트위터를 참고하여 SNS 사이트를 만들어보고 백오피스까지 구현해보는 프로젝트
 
 > 💭 [KPT 회고](https://argente29.tistory.com/116)
+> ☝🏻 [우리 팀 규칙](https://github.com/JisooPyo/KP3C-backoffice-project/wiki/%E2%98%9D%F0%9F%8F%BB-%EC%9A%B0%EB%A6%AC%ED%8C%80-%EC%95%BD%EC%86%8D)
 
-### 프로젝트 요구 사항
+### ✅ 프로젝트 요구 사항
 <details>
 <summary>필수 기능</summary>
 
@@ -86,7 +87,7 @@
 
 <br>
 
-## 기술 스택
+## 🛠️ 기술 스택
 
 <img src="https://img.shields.io/badge/java-007396?style=flat-square&logo=OpenJDK&logoColor=white">&nbsp;
 <img src="https://img.shields.io/badge/spring-6DB33F?style=flat-square&logo=spring&logoColor=white">&nbsp;
@@ -112,7 +113,7 @@
 
 <br>
 
-## 프로젝트 명세
+## 💁‍♀️ 프로젝트 명세
 
 ### ERD
 <image src="https://github.com/JisooPyo/KP3C-backoffice-project/assets/130378232/488fab1b-7789-4f0b-b805-f6b6b270b4d5" width=800px>
@@ -128,7 +129,7 @@
 
 ---
 
-## 우리 프로젝트에서 구현한 기능
+## 👩‍💻 우리 프로젝트에서 구현한 기능
 
 ### 회원가입, 로그인, 로그아웃
 
