@@ -1,24 +1,8 @@
 # Needle은 SNS하지 마라~
+
+스레드와 트위터를 참고하여 SNS 사이트를 만들어보고 백오피스까지 구현해보는 프로젝트
+
 > 💭 [KPT 회고](https://argente29.tistory.com/116)
-
-## 목차
-#### 1. [프로젝트 개요](#프로젝트-개요)
-* [프로젝트명](#프로젝트명)
-* [프로젝트 요구 사항](#프로젝트-요구-사항)
-#### 2. [기술 스택](#기술-스택)
-#### 3. [프로젝트 명세](#프로젝트-명세)
-* [ERD](#erd)
-* [API 명세](#api-명세)
-* [WireFrame](#wireframe)
-#### 4. [Contact](#contact)
-
----
-
-## 프로젝트 개요
-### Needle은 SNS하지 마라~
-KP3C BackOffice Project
-
-스레드와 트위터를 참고하여 SNS 만들기!
 
 ### 프로젝트 요구 사항
 <details>
@@ -100,25 +84,38 @@ KP3C BackOffice Project
 #### 4. HTTP를 HTTPS로 업그레이드 하기
 </details>
 
----
+<br>
 
 ## 기술 스택
 
-<img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=OpenJDK&logoColor=white"><img src="https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white"><img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"><img src="https://img.shields.io/badge/Spring Security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white"><img src="https://img.shields.io/badge/Spring Data JPA-6DB33F?style=for-the-badge&logo=&logoColor=white"><img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white">
-<img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"><img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white"><img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white">
-<img src="https://img.shields.io/badge/Query DSL-0769AD?style=for-the-badge&logo=&logoColor=white"><img src="https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=hibernate&logoColor=white">
+<img src="https://img.shields.io/badge/java-007396?style=flat-square&logo=OpenJDK&logoColor=white">&nbsp;
+<img src="https://img.shields.io/badge/spring-6DB33F?style=flat-square&logo=spring&logoColor=white">&nbsp;
+<img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=flat-square&logo=springboot&logoColor=white">&nbsp;
+<img src="https://img.shields.io/badge/Spring Security-6DB33F?style=flat-square&logo=springsecurity&logoColor=white">&nbsp;
+<img src="https://img.shields.io/badge/Spring Data JPA-6DB33F?style=flat-square&logo=&logoColor=white">&nbsp;
+<img src="https://img.shields.io/badge/gradle-02303A?style=flat-square&logo=gradle&logoColor=white">&nbsp;
+<img src="https://img.shields.io/badge/mysql-4479A1?style=flat-square&logo=mysql&logoColor=white">&nbsp;
+<img src="https://img.shields.io/badge/JWT-000000?style=flat-square&logo=jsonwebtokens&logoColor=white">&nbsp;
+<img src="https://img.shields.io/badge/Redis-DC382D?style=flat-square&logo=redis&logoColor=white">&nbsp;
+<img src="https://img.shields.io/badge/Query DSL-0769AD?style=flat-square&logo=&logoColor=white">&nbsp;
+<img src="https://img.shields.io/badge/Hibernate-59666C?style=flat-square&logo=hibernate&logoColor=white">
 <br>
-<img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white"><img src="https://img.shields.io/badge/CSS-1572B6?style=for-the-badge&logo=css3&logoColor=white"><img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
+<img src="https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white">&nbsp;
+<img src="https://img.shields.io/badge/CSS-1572B6?style=flat-square&logo=css3&logoColor=white">&nbsp;
+<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black">
 <br>
-<img src="https://img.shields.io/badge/IntelliJ IDEA-000000?style=for-the-badge&logo=IntelliJ IDEA&logoColor=white"><img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"><img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white"><img src="https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=Slack&logoColor=white"><img src="https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white">
+<img src="https://img.shields.io/badge/IntelliJ IDEA-000000?style=flat-square&logo=IntelliJ IDEA&logoColor=white">&nbsp;
+<img src="https://img.shields.io/badge/github-181717?style=flat-square&logo=github&logoColor=white">&nbsp;
+<img src="https://img.shields.io/badge/git-F05032?style=flat-square&logo=git&logoColor=white">&nbsp;
+<img src="https://img.shields.io/badge/Slack-4A154B?style=flat-square&logo=Slack&logoColor=white">&nbsp;
+<img src="https://img.shields.io/badge/Postman-FF6C37?style=flat-square&logo=postman&logoColor=white">
 
----
+<br>
 
 ## 프로젝트 명세
 
 ### ERD
-
-[ERD](https://lucid.app/lucidchart/e13258d8-056d-4c44-a9d6-5b8e64a42ef0/edit?viewport_loc=-1650%2C-281%2C3355%2C1419%2C0_0&invitationId=inv_bb176aa7-aced-4a1e-bd60-25ddd6222ae4)
+<image src="https://github.com/JisooPyo/KP3C-backoffice-project/assets/130378232/488fab1b-7789-4f0b-b805-f6b6b270b4d5" width=800px>
 
 ### API 명세
 
@@ -126,7 +123,8 @@ KP3C BackOffice Project
 
 ### WireFrame
 
-[WireFrame](https://www.figma.com/file/5SwRuZ752h7eSNpPTiJBRG/KP3C-thread?type=design&node-id=0%3A1&mode=design&t=0ViA2pwd2VBfDh5A-1)
+<image src="https://github.com/JisooPyo/KP3C-backoffice-project/assets/130378232/86adf0c2-a1c2-43ad-a2ab-e27d1144d377">
+
 
 ---
 
